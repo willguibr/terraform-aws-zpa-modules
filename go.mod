@@ -1,8 +1,4 @@
-module github.com/PaloAltoNetworks/terraform-aws-vmseries-modules
+module github.com/willguibr/terraform-aws-zpa-modules
 
 go 1.14
 
-require (
-	github.com/gruntwork-io/terratest v0.35.7
-	github.com/hashicorp/terraform-json v0.12.0
-)
