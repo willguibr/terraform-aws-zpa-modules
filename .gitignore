@@ -49,3 +49,5 @@ terraform.tfvars.json
 *.auto.tfvars.json
 
 .terraform.lock.hcl
+
+/local_test

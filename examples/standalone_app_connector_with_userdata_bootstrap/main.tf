@@ -10,6 +10,7 @@ module "security_vpc" {
   instance_tenancy        = "default"
 }
 
+
 module "security_subnet_sets" {
   source = "../../modules/subnet_set"
 
@@ -21,6 +22,7 @@ module "security_subnet_sets" {
   cidrs               = { for k, v in var.security_vpc_subnets : k => v if v.set == each.key }
 }
 
+/*
 module "appconnector-vm" {
   for_each = var.appconnector-vm
   source   = "../../modules/appconnector-vm"
@@ -40,6 +42,8 @@ module "appconnector-vm" {
 
   tags = var.global_tags
 }
+
+*/
 
 locals {
   security_vpc_routes = concat(
@@ -62,6 +66,22 @@ module "security_vpc_routes" {
   next_hop_set    = each.value.next_hop_set
 }
 
+resource "zpa_app_connector_group" "ansible_app_connector_test" {
+  name                     = "Test Dummy App Connector Group"
+  description              = "Test Dummy App Connector Group for integration test"
+  enabled                  = true
+  country_code             = "US"
+  dns_query_type           = "IPV4"
+  latitude                 = "37.3382082"
+  longitude                = "-121.8863286"
+  location                 = "San Jose, CA, USA"
+  upgrade_day              = "SUNDAY"
+  upgrade_time_in_secs     = "66600"
+  override_version_profile = true
+  version_profile_id       = "2"
+}
+
+/*
 module "zpa_app_connector_group" {
   source = "../../modules/zpa_app_connector_group"
 
@@ -79,10 +99,11 @@ module "zpa_app_connector_group" {
   dns_query_type           = var.app_connector_group_dns_query_type
 }
 
-# module "zpa_provisioning_key" {
-#   source = "../../modules/zpa_app_connector_group"
+module "zpa_provisioning_key" {
+  source = "../../modules/zpa_app_connector_group"
 
-#   name             = var.provisioning_key_name
-#   association_type = var.provisioning_key_association_type
-#   max_usage        = var.provisioning_key_max_usage
-# }
+  name                = var.provisioning_keys_name
+  association_type    = var.provisioning_keys_association_type
+  max_usage           = var.provisioning_keys_max_usage
+}
+*/

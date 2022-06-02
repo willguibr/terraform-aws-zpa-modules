@@ -1,4 +1,4 @@
-# General
+# # General
 region = "ca-central-1"
 name   = "zpa-example"
 global_tags = {
@@ -6,17 +6,19 @@ global_tags = {
   Application = "Zscaler Private Access"
 }
 
-# VPC
+# # VPC
 security_vpc_name = "security-vpc-example"
 security_vpc_cidr = "10.100.0.0/16"
 
-# Subnets
+
+# # Subnets
 security_vpc_subnets = {
   # Do not modify value of `set=`, it is an internal identifier referenced by main.tf.
   "10.100.0.0/24" = { az = "ca-central-1a", set = "mgmt" }
 }
 
-# Security Groups
+
+# # Security Groups
 security_vpc_security_groups = {
   zpa_app_connector_mgmt = {
     name = "zpa_app_connector_mgmt"
@@ -35,33 +37,37 @@ security_vpc_security_groups = {
   }
 }
 
-# ZPA App Connector VM
+# # Routes
+security_vpc_routes_outbound_destin_cidrs = ["0.0.0.0/0"]
+
+# # ZPA App Connector VM
 ssh_key_name         = "example-ssh-key"
 appconnector_version = "2021.06"
 appconnector-vm = {
-  zpa_app_connector01 = { az = "ca-central-1a" }
+  appconnector-vm01 = { az = "ca-central-1a" }
 }
 
 bootstrap_options = "user_data.sh"
 
-# Routes
-security_vpc_routes_outbound_destin_cidrs = ["0.0.0.0/0"]
 
-# ZPA App Connector Group
-app_connector_group_name                     = "zsdemo-app-connector-aws"
-app_connector_group_description              = "zsdemo-app-connector-aws"
-app_connector_group_enabled                  = true
-app_connector_group_country_code             = "US"
-app_connector_group_latitude                 = "37.3382082"
-app_connector_group_longitude                = "-121.8863286"
-app_connector_group_location                 = "San Jose, CA, USA"
-app_connector_group_upgrade_day              = "SUNDAY"
-app_connector_group_upgrade_time_in_secs     = "66600"
-app_connector_group_override_version_profile = true
-app_connector_group_version_profile_id       = "2"
-app_connector_group_dns_query_type           = "IPV4_IPV6"
+/*
+# # ZPA App Connector Group
+    app_connector_group_name                     = "zsdemo-app-connector-aws"
+    app_connector_group_description              = "zsdemo-app-connector-aws"
+    app_connector_group_enabled                  = true
+    app_connector_group_country_code             = "US"
+    app_connector_group_latitude                 = "37.3382082"
+    app_connector_group_longitude                = "-121.8863286"
+    app_connector_group_location                 = "San Jose, CA, USA"
+    app_connector_group_upgrade_day              = "SUNDAY"
+    app_connector_group_upgrade_time_in_secs     = "66600"
+    app_connector_group_override_version_profile = true
+    app_connector_group_version_profile_id       = "2"
+    app_connector_group_dns_query_type           = "IPV4_IPV6"
 
-# ZPA App Connector Provisioning Key
-# provisioning_key_name             = "zsdemo-app-connector-aws"
-# provisioning_key_association_type = "CONNECTOR_GRP"
-# provisioning_key_max_usage        = 50
+
+# # ZPA App Connector Provisioning Key
+  provisioning_key_name             = "zsdemo-app-connector-aws"
+  provisioning_key_association_type = "CONNECTOR_GRP"
+  provisioning_key_max_usage        = 50
+*/
