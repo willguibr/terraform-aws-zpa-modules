@@ -1,30 +1,45 @@
-# PA VM AMI ID lookup based on version and license type (determined by product code)
+# ZPA App Connector VM AMI ID lookup based on version (determined by product code)
 data "aws_ami" "this" {
-  count = var.vmseries_ami_id != null ? 0 : 1
+  count = var.appconnector_ami_id != null ? 0 : 1
 
   most_recent = true
   owners      = ["aws-marketplace"]
 
   filter {
     name   = "name"
-    values = ["PA-VM-AWS-${var.vmseries_version}*"]
+    values = ["zpa-connector-${var.appconnector_version}*"]
   }
   filter {
     name   = "product-code"
-    values = [var.vmseries_product_code]
+    values = [var.zpa_product_code]
   }
 }
 
-# Use the default KMS key in the current region for EBS encryption
-data "aws_ebs_default_kms_key" "current" {
-  count = var.ebs_encrypted && var.ebs_kms_key_id == null ? 1 : 0
+# Creates/manages KMS CMK
+resource "aws_kms_key" "this" {
+  description              = var.description
+  customer_master_key_spec = var.key_spec
+  deletion_window_in_days  = var.customer_master_key_spec
+  is_enabled               = var.enabled
+  enable_key_rotation      = var.rotation_enabled
+  multi_region             = var.multi_region
 }
 
-# Provide an alias for the default KMS key
-data "aws_kms_alias" "current_arn" {
-  count = var.ebs_encrypted && var.ebs_kms_key_id == null ? 1 : 0
-  name  = data.aws_ebs_default_kms_key.current[0].key_arn
+# Create an alias to the key
+resource "aws_kms_alias" "this" {
+  name          = "alias/${var.kms_alias}"
+  target_key_id = aws_kms_key.this.key_id
 }
+
+# Create Parameter Store
+resource "aws_ssm_parameter" "this" {
+  name        = var.secure_parameters
+  description = var.secure_parameters
+  type        = "SecureString"
+  value       = zpa_provisioning_key.this.provisioning_key
+}
+
+
 
 # Network Interfaces
 resource "aws_network_interface" "this" {
@@ -61,26 +76,15 @@ resource "aws_eip_association" "this" {
   ]
 }
 
-# Create PA VM-series instances
+# Create ZPA instances
 resource "aws_instance" "this" {
 
   ami                                  = coalesce(var.vmseries_ami_id, try(data.aws_ami.this[0].id, null))
   iam_instance_profile                 = var.iam_instance_profile
   instance_type                        = var.instance_type
   key_name                             = var.ssh_key_name
-  disable_api_termination              = false
-  ebs_optimized                        = true
-  instance_initiated_shutdown_behavior = "stop"
-  monitoring                           = false
 
   user_data = base64encode(var.bootstrap_options)
-
-  root_block_device {
-    delete_on_termination = true
-    encrypted             = var.ebs_encrypted
-    kms_key_id            = var.ebs_encrypted == false ? null : var.ebs_kms_key_id != null ? var.ebs_kms_key_id : data.aws_kms_alias.current_arn[0].target_key_arn
-    tags                  = merge(var.tags, { Name = var.name })
-  }
 
   # Attach primary interface to the instance
   dynamic "network_interface" {

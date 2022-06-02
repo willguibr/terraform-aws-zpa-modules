@@ -5,5 +5,15 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 3.74"
     }
+    zpa = {
+      source  = "zscaler/zpa"
+      version = "2.1.5"
+    }
   }
 }
+
+# provider "aws" {
+#   region = var.region
+# }
+
+# provider "zpa" {}

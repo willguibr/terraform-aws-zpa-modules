@@ -1,39 +1,81 @@
+# aws variables
+variable "region" {
+  description = "The AWS region."
+  type = string
+}
 variable "name" {
-  description = "Name of the VM-Series instance."
+  description = "Name of the App Connector instance."
   default     = null
   type        = string
 }
 
-# VM-Series version setup
-variable "vmseries_ami_id" {
+variable "name-prefix" {
+  description = "The name prefix for all your resources"
+  default     = "zsdemo"
+  type        = string
+}
+
+variable "resource-tag" {
+  description = "A tag to associate to all the App Connector module resources"
+  default     = "zsdemo"
+}
+
+# IAM Policy Variables
+variable "iam_policy" {
+  description = "Zscaler_SSM_Policy"
+  default     = "Zscaler_SSM_Policy"
+  type        = string
+}
+
+variable "aws_iam_role" {
+  description = "Zscaler_SSM_IAM_Role"
+  default     = "Zscaler_SSM_IAM_Role"
+  type        = string
+}
+
+# KMS Key Variables
+variable "description" {
+  description = "Zscaler_KMS_Key"
+  default     = "Zscaler_KMS_Key"
+  type        = string
+}
+
+variable "multi_region" {
+  description = "Enable Multi-Region KMS"
+  default     = true
+  type        = bool
+}
+
+# App Connector version setup
+variable "appconnector_ami_id" {
   description = <<-EOF
-  Specific AMI ID to use for VM-Series instance.
-  If `null` (the default), `vmseries_version` and `vmseries_product_code` vars are used to determine a public image to use.
+  Specific AMI ID to use for App Connector instance.
+  If `null` (the default), `appconnector_version` and `appconnector_product_code` vars are used to determine a public image to use.
   EOF
   default     = null
   type        = string
 }
 
-variable "vmseries_version" {
+variable "appconnector_version" {
   description = <<-EOF
-  VM-Series Firewall version to deploy.
-  To list all available VM-Series versions, run the command provided below.
-  Please have in mind that the `product-code` may need to be updated - check the `vmseries_product_code` variable for more information.
+  ZPA App Connector version to deploy.
+  To list all available App Connector VM versions, run the command provided below.
+  Please have in mind that the `product-code` may need to be updated - check the `zpa_product_code` variable for more information.
   ```
-  aws ec2 describe-images --region us-west-1 --filters "Name=product-code,Values=6njl1pau431dv1qxipg63mvah" "Name=name,Values=PA-VM-AWS*" --output json --query "Images[].Description" \| grep -o 'PA-VM-AWS-.*' \| sort
+  aws ec2 describe-images --region ca-central-1 --filters "Name=product-code,Values=3n2udvk6ba2lglockhnetlujo" "Name=name,Values=zpa-connector*" --output json --query "Images[].Description" \| grep -o 'zpa-connector-.*' \| sort
   ```
   EOF
-  default     = "10.0.8-h8"
+  default     = "2021.06"
   type        = string
 }
 
-variable "vmseries_product_code" {
+variable "zpa_product_code" {
   description = <<-EOF
-  Product code corresponding to a chosen VM-Series license type model - by default - BYOL.
-  To check the available license type models and their codes, please refer to the
-  [VM-Series documentation](https://docs.paloaltonetworks.com/vm-series/10-0/vm-series-deployment/set-up-the-vm-series-firewall-on-aws/deploy-the-vm-series-firewall-on-aws/obtain-the-ami/get-amazon-machine-image-ids.html)
+  Product code corresponding to a chosen App Connector license type model - by default - BYOL.
+  Please refer to the:
+  [ZPA App Connector documentation](https://help.zscaler.com/zpa/connector-deployment-guide-amazon-web-services)
   EOF
-  default     = "6njl1pau431dv1qxipg63mvah"
+  default     = "3n2udvk6ba2lglockhnetlujo"
   type        = string
 }
 
@@ -43,27 +85,66 @@ variable "iam_instance_profile" {
   type        = string
 }
 
-variable "instance_type" {
-  description = "EC2 instance type."
-  default     = "m5.xlarge"
-  type        = string
-}
-
-variable "ebs_encrypted" {
-  description = "Whether to enable EBS encryption on volumes."
-  default     = true
-  type        = bool
-}
-
-variable "ebs_kms_key_id" {
-  description = "The ARN for the KMS key to use for volume encryption."
-  default     = null
-  type        = string
+variable instance_type {
+  description = "App Connector Instance Type"
+  default     = "t3.medium"
+  validation {
+          condition     = (
+            var.instance_type == "t3.medium" ||
+            var.instance_type == "t2.medium" ||
+            var.instance_type == "m5.large"  ||
+            var.instance_type == "c5.large"  ||
+            var.instance_type == "c5a.large"
+          )
+          error_message = "Input instance_type must be set to an approved vm instance type."
+      }
 }
 
 variable "ssh_key_name" {
   description = "Name of AWS keypair to associate with instances."
   type        = string
+}
+
+# Options available
+# SYMMETRIC_DEFAULT, RSA_2048, RSA_3072,
+# RSA_4096, ECC_NIST_P256, ECC_NIST_P384,
+# ECC_NIST_P521, or ECC_SECG_P256K1
+variable "key_spec" {
+  default = "SYMMETRIC_DEFAULT"
+  type    = string
+}
+
+variable "enabled" {
+  default = true
+  type    = bool
+}
+
+variable "rotation_enabled" {
+  default = false
+  type    = bool
+}
+
+variable "customer_master_key_spec" {
+  default = 30
+  type    = number
+}
+
+variable "kms_alias" {
+  description = "KMS Alias"
+  default = "Zscaler_KMS_SSM"
+  type        = string
+}
+
+
+variable "bootstrap_options" {
+  default     = "user_data.sh"
+  type        = string
+}
+
+variable "tags" {
+  description = "Map of additional tags to apply to all resources."
+  default     = {}
+  type        = map(any)
 }
 
 variable "interfaces" {
@@ -110,21 +191,4 @@ variable "interfaces" {
   # For now it's not possible to have a more strict definition of variable type, optional
   # object attributes are still experimental
   type = map(any)
-}
-
-variable "bootstrap_options" {
-  description = <<-EOF
-  VM-Series bootstrap options to provide using instance user data. Contents determine type of bootstap method to use.
-  If empty (the default), bootstrap process is not triggered at all.
-  For more information on available methods, please refer to VM-Series documentation for specific version.
-  For 10.0 docs are available [here](https://docs.paloaltonetworks.com/vm-series/10-0/vm-series-deployment/bootstrap-the-vm-series-firewall.html).
-  EOF
-  default     = ""
-  type        = string
-}
-
-variable "tags" {
-  description = "Map of additional tags to apply to all resources."
-  default     = {}
-  type        = map(any)
 }
