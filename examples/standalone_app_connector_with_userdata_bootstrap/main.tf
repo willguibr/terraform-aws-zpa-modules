@@ -22,10 +22,10 @@ module "security_subnet_sets" {
   cidrs               = { for k, v in var.security_vpc_subnets : k => v if v.set == each.key }
 }
 
-/*
+
 module "appconnector-vm" {
   for_each = var.appconnector-vm
-  source   = "../../modules/appconnector-vm"
+  source   = "../../modules/zpa-appconnector-vm"
 
   name              = var.name
   ssh_key_name      = var.ssh_key_name
@@ -41,9 +41,12 @@ module "appconnector-vm" {
   }
 
   tags = var.global_tags
+  zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
+  secure_parameters = var.secure_parameters
+  path_to_public_key = var.path_to_public_key
 }
 
-*/
+
 
 locals {
   security_vpc_routes = concat(
@@ -81,29 +84,27 @@ resource "zpa_app_connector_group" "ansible_app_connector_test" {
   version_profile_id       = "2"
 }
 
-/*
+
 module "zpa_app_connector_group" {
   source = "../../modules/zpa_app_connector_group"
 
-  name                     = var.app_connector_group_name
-  description              = var.app_connector_group_description
-  enabled                  = var.app_connector_group_enabled
-  country_code             = var.app_connector_group_country_code
-  latitude                 = var.app_connector_group_latitude
-  longitude                = var.app_connector_group_longitude
-  location                 = var.app_connector_group_location
-  upgrade_day              = var.app_connector_group_upgrade_day
-  upgrade_time_in_secs     = var.app_connector_group_upgrade_time_in_secs
-  override_version_profile = var.app_connector_group_override_version_profile
-  version_profile_id       = var.app_connector_group_version_profile_id
-  dns_query_type           = var.app_connector_group_dns_query_type
-}
+  app_connector_group_name  = var.app_connector_group_name
+  app_connector_group_description              = var.app_connector_group_description
+  app_connector_group_enabled                  = var.app_connector_group_enabled
+  app_connector_group_country_code             = var.app_connector_group_country_code
+  app_connector_group_latitude                 = var.app_connector_group_latitude
+  app_connector_group_longitude                = var.app_connector_group_longitude
+  app_connector_group_location                 = var.app_connector_group_location
+  app_connector_group_upgrade_day              = var.app_connector_group_upgrade_day
+  app_connector_group_upgrade_time_in_secs     = var.app_connector_group_upgrade_time_in_secs
+  app_connector_group_version_profile_id       = var.app_connector_group_version_profile_id
+  app_connector_group_dns_query_type           = var.app_connector_group_dns_query_type
+#}
 
-module "zpa_provisioning_key" {
-  source = "../../modules/zpa_app_connector_group"
+#module "zpa_provisioning_key" {
+ # source = "../../modules/zpa_app_connector_group"
 
-  name                = var.provisioning_keys_name
-  association_type    = var.provisioning_keys_association_type
-  max_usage           = var.provisioning_keys_max_usage
+  provisioning_key_name                = var.provisioning_key_name
+  provisioning_key_association_type    = var.provisioning_key_association_type
+  provisioning_key_max_usage           = var.provisioning_key_max_usage
 }
-*/

@@ -17,4 +17,7 @@ provider "aws" {
 }
 
 
-provider "zpa" {}
+provider "zpa" {
+
+}
+

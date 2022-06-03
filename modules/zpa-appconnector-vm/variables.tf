@@ -1,8 +1,9 @@
 # aws variables
+/*
 variable "region" {
   description = "The AWS region."
   type = string
-}
+}*/
 variable "name" {
   description = "Name of the App Connector instance."
   default     = null
@@ -105,6 +106,12 @@ variable "ssh_key_name" {
   type        = string
 }
 
+variable "path_to_public_key" {
+  description = "path to the ssh public key"
+  type        = string
+}
+
+
 # Options available
 # SYMMETRIC_DEFAULT, RSA_2048, RSA_3072,
 # RSA_4096, ECC_NIST_P256, ECC_NIST_P384,
@@ -191,4 +198,16 @@ variable "interfaces" {
   # For now it's not possible to have a more strict definition of variable type, optional
   # object attributes are still experimental
   type = map(any)
+}
+
+variable "zpa_provisioning_key" {
+  description = "zpa provisioning key"
+  default     = null
+  type        = string
+}
+
+variable "secure_parameters" {
+  description = "aws ssm secure parameter"
+  default     = null
+  type        = string
 }

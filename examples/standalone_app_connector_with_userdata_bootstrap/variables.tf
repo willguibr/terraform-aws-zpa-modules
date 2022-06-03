@@ -12,7 +12,7 @@ variable "ssh_key_name" {}
 variable "security_vpc_routes_outbound_destin_cidrs" {}
 variable "bootstrap_options" {}
 
-/*
+
 # Variables for ZPA App Connector Group
 variable "app_connector_group_name" {}
 variable "app_connector_group_description" {}
@@ -32,4 +32,8 @@ variable "app_connector_group_dns_query_type" {}
 variable "provisioning_key_name" {}
 variable "provisioning_key_association_type" {}
 variable "provisioning_key_max_usage" {}
-*/
+
+
+#aws ssm secure parameter
+variable "secure_parameters"  {}
+variable "path_to_public_key" {}

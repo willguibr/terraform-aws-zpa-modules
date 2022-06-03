@@ -36,7 +36,8 @@ resource "aws_ssm_parameter" "this" {
   name        = var.secure_parameters
   description = var.secure_parameters
   type        = "SecureString"
-  value       = zpa_provisioning_key.this.provisioning_key
+ # value       = zpa_provisioning_key.this.provisioning_key
+  value       = var.zpa_provisioning_key
 }
 
 
@@ -75,6 +76,10 @@ resource "aws_eip_association" "this" {
     aws_instance.this
   ]
 }
+resource "aws_key_pair" "mykey" {
+  key_name    = var.ssh_key_name
+  public_key  = file(var.path_to_public_key)
+}
 
 # Create ZPA instances
 resource "aws_instance" "this" {
@@ -82,7 +87,7 @@ resource "aws_instance" "this" {
   ami                                  = coalesce(var.appconnector_ami_id, try(data.aws_ami.this[0].id, null))
   iam_instance_profile                 = var.iam_instance_profile
   instance_type                        = var.instance_type
-  key_name                             = var.ssh_key_name
+  key_name                             = aws_key_pair.mykey.key_name
 
   user_data = base64encode(var.bootstrap_options)
 
