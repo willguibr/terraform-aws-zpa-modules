@@ -396,7 +396,7 @@ Reference - https://www.terraform.io/docs/configuration/functions/try.html
 We will maintain one mono repo per cloud provider. Three repos, representing AWS, Azure and GCP, as we kick off our efforts.
 
       ├── README.md <- Documentation explaining the purpose of this mono repo
-      ├── LICENSE.md <- Palo Alto Networks Script Software Agreement
+      ├── LICENSE.md <- Zscaler Script Software Agreement
       ├── modules/
       │   ├── vpc/
       │   │   ├── README.md <- Documentation on how to use submodules on its own
