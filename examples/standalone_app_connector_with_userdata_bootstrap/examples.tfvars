@@ -50,7 +50,7 @@ appconnector-vm = {
 bootstrap_options = "user_data.sh"
 
 
-/*
+
 # # ZPA App Connector Group
     app_connector_group_name                     = "zsdemo-app-connector-aws"
     app_connector_group_description              = "zsdemo-app-connector-aws"
@@ -70,4 +70,7 @@ bootstrap_options = "user_data.sh"
   provisioning_key_name             = "zsdemo-app-connector-aws"
   provisioning_key_association_type = "CONNECTOR_GRP"
   provisioning_key_max_usage        = 50
-*/
+
+  #aws ssms secure parameter
+  secure_parameters = "demo"
+  path_to_public_key = "./sshkey.pub"
