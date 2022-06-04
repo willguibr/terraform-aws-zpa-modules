@@ -32,16 +32,11 @@
 .idea
 .idea
 
-# Palo auth codes
-authcodes
+
 # Crash log files
 crash.log
 credentials.json
-# Palo specific
-init-cfg.txt
-temp
-terraform.rc
-tmp
+
 # Auto variables
 terraform.tfvars
 terraform.tfvars.json
@@ -51,3 +46,4 @@ terraform.tfvars.json
 .terraform.lock.hcl
 
 /local_test
+local.pub

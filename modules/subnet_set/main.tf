@@ -53,12 +53,13 @@ data "aws_route_table" "this" {
   tags           = { Name = coalesce(each.value.route_table_name, each.value.name) }
 }
 
+
 resource "aws_route_table" "this" {
   for_each = { for k, v in local.input_subnets : k => v if v.read_route_table == false && var.create_shared_route_table == false }
 
   vpc_id           = var.vpc_id
   tags             = merge(var.global_tags, each.value.local_tags, { Name = coalesce(each.value.route_table_name, each.value.name) })
-  propagating_vgws = var.propagating_vgws
+  nat_gateway_id = var.nat_gateways
 }
 
 resource "aws_route_table" "shared" {
@@ -66,7 +67,7 @@ resource "aws_route_table" "shared" {
 
   vpc_id           = var.vpc_id
   tags             = merge(var.global_tags, each.value[0].local_tags, { Name = each.value[0].route_table_name })
-  propagating_vgws = var.propagating_vgws
+  nat_gateway_id = var.nat_gateways
 }
 
 resource "aws_route_table_association" "this" {

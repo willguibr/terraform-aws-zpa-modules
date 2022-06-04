@@ -3,7 +3,7 @@ resource "aws_route" "this" {
 
   route_table_id              = each.value
   destination_cidr_block      = var.cidr_type == "ipv4" ? var.to_cidr : null
-  destination_ipv6_cidr_block = var.cidr_type == "ipv6" ? var.to_cidr : null
+  # destination_ipv6_cidr_block = var.cidr_type == "ipv6" ? var.to_cidr : null
   # destination_prefix_list_id would require aws provider version ~> 3.45
   # carrier_gateway_id would require aws provider version ~> 3.35
 
