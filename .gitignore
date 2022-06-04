@@ -32,6 +32,10 @@
 .idea
 .idea
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature_aws_fix
 # Crash log files
 crash.log
 credentials.json

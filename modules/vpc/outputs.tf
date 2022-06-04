@@ -23,15 +23,15 @@ output "internet_gateway_route_table" {
   value       = var.create_internet_gateway ? try(aws_route_table.from_igw[0], null) : null
 }
 
-output "vpn_gateway" {
-  description = "The entire Virtual Private Gateway object. It is null when `create_vpn_gateway` is false."
-  value       = var.create_vpn_gateway ? try(aws_vpn_gateway.this[0], null) : null
-}
+# output "vpn_gateway" {
+#   description = "The entire Virtual Private Gateway object. It is null when `create_vpn_gateway` is false."
+#   value       = var.create_vpn_gateway ? try(aws_vpn_gateway.this[0], null) : null
+# }
 
-output "vpn_gateway_route_table" {
-  description = "The Route Table object created to handle traffic from Virtual Private Gateway (VGW). It is null when `create_vpn_gateway` is false."
-  value       = var.create_vpn_gateway ? try(aws_route_table.from_vgw[0], null) : null
-}
+# output "vpn_gateway_route_table" {
+#   description = "The Route Table object created to handle traffic from Virtual Private Gateway (VGW). It is null when `create_vpn_gateway` is false."
+#   value       = var.create_vpn_gateway ? try(aws_route_table.from_vgw[0], null) : null
+# }
 
 output "security_group_ids" {
   description = "Map of Security Group Name -> ID (newly created)."

@@ -1,8 +1,3 @@
-# aws variables
-variable "region" {
-  description = "The AWS region."
-  type = string
-}
 variable "name" {
   description = "Name of the App Connector instance."
   default     = null
@@ -14,7 +9,6 @@ variable "name-prefix" {
   default     = "zsdemo"
   type        = string
 }
-
 variable "resource-tag" {
   description = "A tag to associate to all the App Connector module resources"
   default     = "zsdemo"
@@ -81,7 +75,6 @@ variable "zpa_product_code" {
 
 variable "iam_instance_profile" {
   description = "IAM instance profile."
-  default     = null
   type        = string
 }
 
@@ -104,6 +97,12 @@ variable "ssh_key_name" {
   description = "Name of AWS keypair to associate with instances."
   type        = string
 }
+
+variable "path_to_public_key" {
+  description = "path to the ssh public key"
+  type        = string
+}
+
 
 # Options available
 # SYMMETRIC_DEFAULT, RSA_2048, RSA_3072,
@@ -131,7 +130,7 @@ variable "customer_master_key_spec" {
 
 variable "kms_alias" {
   description = "KMS Alias"
-  default = "Zscaler_KMS_SSM"
+  default = "Zscaler_KMS_SSM01"
   type        = string
 }
 
@@ -191,4 +190,22 @@ variable "interfaces" {
   # For now it's not possible to have a more strict definition of variable type, optional
   # object attributes are still experimental
   type = map(any)
+}
+
+variable "zpa_provisioning_key" {
+  description = "zpa provisioning key"
+  # default     = null
+  type        = string
+}
+
+variable "secure_parameters" {
+  description = "aws ssm secure parameter"
+  # default     = null
+  type        = string
+}
+
+variable "secure_parameter_type" {
+  description = "Type of the SSM parameter"
+  default     = "SecureString"
+  type        = string
 }
