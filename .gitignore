@@ -51,3 +51,4 @@ terraform.tfvars.json
 .terraform.lock.hcl
 
 /local_test
+local.pub
