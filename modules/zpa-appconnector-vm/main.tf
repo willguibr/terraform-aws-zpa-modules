@@ -15,6 +15,41 @@ data "aws_ami" "this" {
   }
 }
 
+data "aws_iam_policy_document" "this" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:ListKeys",
+      "tag:GetResources",
+      "kms:ListAliases",
+      "kms:DescribeKey"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter"]
+    resources = ["arn:aws:ssm:*:*:parameter/ZSDEMO*"]
+  }
+}
+
+data "aws_iam_policy_document" "app_connector_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    effect  = "Allow"
+    sid     = ""
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_policy" "this" {
+  name        = var.iam_policy
+  description = var.iam_policy
+  policy      = data.aws_iam_policy_document.this.json
+}
 # Creates/manages KMS CMK
 resource "aws_kms_key" "this" {
   description              = var.description
@@ -23,6 +58,21 @@ resource "aws_kms_key" "this" {
   is_enabled               = var.enabled
   enable_key_rotation      = var.rotation_enabled
   multi_region             = var.multi_region
+}
+
+resource "aws_iam_role" "this" {
+  name               = var.aws_iam_role
+  assume_role_policy = data.aws_iam_policy_document.app_connector_role_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "zscaler_policy_attachment" {
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.this.arn
+}
+
+resource "aws_iam_instance_profile" "app_connector_profile" {
+  name = "${var.name-prefix}-app_connector_profile-${var.resource-tag}"
+  role = aws_iam_role.this.name
 }
 
 # Create an alias to the key
