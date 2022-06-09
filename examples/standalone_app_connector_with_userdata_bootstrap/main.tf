@@ -30,6 +30,7 @@ module "appconnector-vm" {
   name              = var.name
   ssh_key_name      = var.ssh_key_name
   bootstrap_options = var.bootstrap_options
+  iam_instance_profile = var.iam_instance_profile
   interfaces = {
     mgmt = {
       device_index       = 0

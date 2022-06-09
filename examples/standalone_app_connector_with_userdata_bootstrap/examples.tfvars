@@ -48,7 +48,7 @@ appconnector-vm = {
 }
 
 bootstrap_options = "user_data.sh"
-
+iam_instance_profile = "ZPA_Instance_Profile"
 
 
 # # ZPA App Connector Group

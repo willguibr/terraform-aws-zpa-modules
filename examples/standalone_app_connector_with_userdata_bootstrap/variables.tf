@@ -11,6 +11,7 @@ variable "appconnector_version" {}
 variable "ssh_key_name" {}
 variable "security_vpc_routes_outbound_destin_cidrs" {}
 variable "bootstrap_options" {}
+variable "iam_instance_profile" {}
 
 
 # Variables for ZPA App Connector Group

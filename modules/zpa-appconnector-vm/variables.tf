@@ -138,7 +138,7 @@ variable "customer_master_key_spec" {
 
 variable "kms_alias" {
   description = "KMS Alias"
-  default = "Zscaler_KMS_SSM"
+  default = "Zscaler_KMS_SSM01"
   type        = string
 }
 
