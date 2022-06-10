@@ -137,11 +137,6 @@ resource "aws_key_pair" "this" {
   public_key  = file(var.path_to_public_key)
 }
 
-# resource "aws_key_pair" "deployer" {
-#   key_name   = "${var.name-prefix}-key-${random_string.suffix.result}"
-#   public_key = var.public-key
-# }
-
 # Create ZPA instances
 resource "aws_instance" "this" {
 
