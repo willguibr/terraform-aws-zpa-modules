@@ -15,7 +15,11 @@ data "aws_ami" "this" {
   }
 }
 
+<<<<<<< HEAD
 data "aws_iam_policy_document" "this_ssm_policy" {
+=======
+data "aws_iam_policy_document" "this" {
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
   statement {
     effect = "Allow"
     actions = [
@@ -33,7 +37,11 @@ data "aws_iam_policy_document" "this_ssm_policy" {
   }
 }
 
+<<<<<<< HEAD
 data "aws_iam_policy_document" "this_assume_role" {
+=======
+data "aws_iam_policy_document" "app_connector_role_policy" {
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
   statement {
     actions = ["sts:AssumeRole"]
     effect  = "Allow"
@@ -52,6 +60,14 @@ resource "random_string" "suffix" {
   special = false
 }
 
+<<<<<<< HEAD
+=======
+resource "aws_iam_policy" "this" {
+  name        = "${var.iam_policy}-zpa-iam-${random_string.suffix.result}"
+  description = var.iam_policy
+  policy      = data.aws_iam_policy_document.this.json
+}
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 # Creates/manages KMS CMK
 resource "aws_kms_key" "this" {
   description              = var.description
@@ -62,14 +78,34 @@ resource "aws_kms_key" "this" {
   multi_region             = var.multi_region
 }
 
+resource "aws_iam_role" "this" {
+  name               = "${var.aws_iam_role}-zpa-role-${random_string.suffix.result}"
+  assume_role_policy = data.aws_iam_policy_document.app_connector_role_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "zscaler_policy_attachment" {
+  role       = aws_iam_role.this.name
+  policy_arn = aws_iam_policy.this.arn
+}
+
+resource "aws_iam_instance_profile" "iam_instance_profile" {
+  name = "${var.name-prefix}-zpa-profile-${random_string.suffix.result}"
+  role = aws_iam_role.this.name
+}
+
 # Create an alias to the key
 resource "aws_kms_alias" "this" {
+<<<<<<< HEAD
   name          = "alias/${var.kms_alias}-${random_string.suffix.result}"
+=======
+  name          = "alias/${var.kms_alias}-zpa-kms-${random_string.suffix.result}"
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
   target_key_id = aws_kms_key.this.key_id
 }
 
 # Create Parameter Store
 resource "aws_ssm_parameter" "this" {
+<<<<<<< HEAD
   name        = "${var.secure_parameters}-${random_string.suffix.result}"
   description = var.secure_parameters
   type        = var.secure_parameter_type
@@ -98,6 +134,16 @@ resource "aws_iam_policy" "this" {
   policy      = data.aws_iam_policy_document.this_ssm_policy.json
 }
 
+=======
+ count = var.create_secure_parameter? 1 : 0
+
+  name        = var.parameter_name
+  description = var.parameter_description
+  type        = "SecureString"
+  value       = var.zpa_provisioning_key
+}
+
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 # Network Interfaces
 resource "aws_network_interface" "this" {
   for_each = var.interfaces
@@ -132,8 +178,12 @@ resource "aws_eip_association" "this" {
     aws_instance.this
   ]
 }
+<<<<<<< HEAD
 resource "aws_key_pair" "mykey" {
   # key_name    = var.ssh_key_name
+=======
+resource "aws_key_pair" "this" {
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
   key_name   = "${var.ssh_key_name}-key-${random_string.suffix.result}"
   public_key  = file(var.path_to_public_key)
 }
@@ -147,9 +197,15 @@ resource "aws_key_pair" "mykey" {
 resource "aws_instance" "this" {
 
   ami                                  = coalesce(var.appconnector_ami_id, try(data.aws_ami.this[0].id, null))
+<<<<<<< HEAD
   iam_instance_profile                 = aws_iam_instance_profile.this.name
   instance_type                        = var.instance_type
   key_name                             = aws_key_pair.mykey.key_name
+=======
+  iam_instance_profile                 = aws_iam_instance_profile.iam_instance_profile.name
+  instance_type                        = var.instance_type
+  key_name                             = aws_key_pair.this.key_name
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
   user_data                            = file(var.bootstrap_options)
 
   # Attach primary interface to the instance

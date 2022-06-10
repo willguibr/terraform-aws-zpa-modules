@@ -22,6 +22,15 @@ module "security_subnet_sets" {
   cidrs               = { for k, v in var.security_vpc_subnets : k => v if v.set == each.key }
 }
 
+<<<<<<< HEAD
+=======
+module "natgw_set" {
+  # This also a "set" and it means the same thing: we will repeat a nat gateway for each subnet (of the subnet_set).
+  source = "../../modules/nat_gateway_set"
+
+  subnets = module.security_subnet_sets["natgw"].subnets
+}
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 
 module "appconnector-vm" {
   for_each = var.appconnector-vm
@@ -29,16 +38,26 @@ module "appconnector-vm" {
 
   name                 = var.name
   ssh_key_name         = var.ssh_key_name
+<<<<<<< HEAD
   iam_instance_profile = var.iam_instance_profile
   bootstrap_options    = var.bootstrap_options
   appconnector_version  = var.appconnector_version
+=======
+  bootstrap_options    = var.bootstrap_options
+  iam_instance_profile = var.iam_instance_profile
+  appconnector_version = var.appconnector_version
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
   interfaces = {
     mgmt = {
       device_index       = 0
       security_group_ids = [module.security_vpc.security_group_ids["zpa_app_connector_mgmt"]]
       source_dest_check  = true
       subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
+<<<<<<< HEAD
       create_public_ip   = true
+=======
+      create_public_ip   = false
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
     }
   }
 
@@ -48,11 +67,26 @@ module "appconnector-vm" {
   path_to_public_key   = var.path_to_public_key
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 locals {
   security_vpc_routes = concat(
     [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
       {
         subnet_key   = "mgmt"
+<<<<<<< HEAD
+=======
+        next_hop_set = module.natgw_set.next_hop_set
+        to_cidr      = cidr
+      }
+    ],
+        [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
+      {
+        subnet_key   = "natgw"
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
         next_hop_set = module.security_vpc.igw_as_next_hop_set
         to_cidr      = cidr
       }
@@ -70,7 +104,11 @@ module "security_vpc_routes" {
 }
 
 module "zpa_app_connector_group" {
+<<<<<<< HEAD
   source   = "../../modules/zpa_app_connector_group"
+=======
+  source = "../../modules/zpa_app_connector_group"
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 
   app_connector_group_name                 = var.app_connector_group_name
   app_connector_group_description          = var.app_connector_group_description
@@ -84,9 +122,15 @@ module "zpa_app_connector_group" {
   app_connector_group_version_profile_id   = var.app_connector_group_version_profile_id
   app_connector_group_dns_query_type       = var.app_connector_group_dns_query_type
 
+<<<<<<< HEAD
   # Variables for the Provisioning Key
+=======
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
   provisioning_key_name             = var.provisioning_key_name
   provisioning_key_association_type = var.provisioning_key_association_type
   provisioning_key_max_usage        = var.provisioning_key_max_usage
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
