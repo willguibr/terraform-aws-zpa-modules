@@ -1,5 +1,0 @@
-#terraform plan
-terraform plan -out demo.tfplan --var-file=examples.tfvars
-
-#terraform apply
-terraform apply demo.tfplan
