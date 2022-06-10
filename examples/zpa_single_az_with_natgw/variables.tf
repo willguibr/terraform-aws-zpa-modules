@@ -6,11 +6,7 @@ variable "security_vpc_name" {}
 variable "security_vpc_cidr" {}
 variable "security_vpc_security_groups" {}
 variable "security_vpc_subnets" {}
-<<<<<<< HEAD
-variable "appconnectors" {}
-=======
 variable "appconnector-vm" {}
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 variable "appconnector_version" {}
 variable "ssh_key_name" {}
 variable "security_vpc_routes_outbound_destin_cidrs" {}
@@ -33,10 +29,7 @@ variable "app_connector_group_override_version_profile" {}
 variable "app_connector_group_version_profile_id" {}
 variable "app_connector_group_dns_query_type" {}
 
-<<<<<<< HEAD
-=======
 
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 # Variables for ZPA Provisioning Key
 variable "provisioning_key_name" {}
 variable "provisioning_key_association_type" {}
@@ -44,12 +37,5 @@ variable "provisioning_key_max_usage" {}
 
 
 #aws ssm secure parameter
-<<<<<<< HEAD
-<<<<<<< HEAD:examples/zpa_single_az_with_natgw/variables.tf
 variable "secure_parameters" {}
-=======
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw:examples/zpa_multi_az_with_natgw/variables.tf
-=======
-variable "secure_parameters" {}
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 variable "path_to_public_key" {}
