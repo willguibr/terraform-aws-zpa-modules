@@ -40,7 +40,6 @@ module "appconnector-vm" {
   name                  = each.key
   tags                  = var.global_tags
   ssh_key_name          = "${var.ssh_key_name}-key${var.name-prefix}"
-  # ssh_key_name =      "${var.ssh_key_name}-key-${random_string.suffix.result}"
   iam_instance_profile = var.iam_instance_profile
   bootstrap_options    = var.bootstrap_options
   appconnector_version  = var.appconnector_version
@@ -51,10 +50,10 @@ module "appconnector-vm" {
   interfaces = {
     data = {
       device_index       = 0
-      security_group_ids = [module.security_vpc.security_group_ids["appconnector_data"]]
+      security_group_ids = [module.security_vpc.security_group_ids["appconnector_mgmt"]]
       source_dest_check  = false
-      subnet_id          = module.security_subnet_sets["data"].subnets[each.value.az].id
-      create_public_ip   = true
+      subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
+      create_public_ip   = false
     }
   }
 }
@@ -63,16 +62,15 @@ locals {
   security_vpc_routes = concat(
     [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
       {
-        subnet_key   = "natgw"
-        next_hop_set = module.security_vpc.igw_as_next_hop_set
+        subnet_key   = "mgmt"
+        next_hop_set = module.natgw_set.next_hop_set
         to_cidr      = cidr
       }
     ],
-    [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
+        [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
       {
-        subnet_key   = "data"
-        next_hop_set = module.natgw_set.next_hop_set
-        # next_hop_set = module.security_vpc.igw_as_next_hop_set
+        subnet_key   = "natgw"
+        next_hop_set = module.security_vpc.igw_as_next_hop_set
         to_cidr      = cidr
       }
     ],

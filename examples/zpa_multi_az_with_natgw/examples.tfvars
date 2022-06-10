@@ -31,23 +31,11 @@ security_vpc_security_groups = {
 # Security VPC Subnets
 security_vpc_subnets = {
   # Do not modify value of `set=`, it is an internal identifier referenced by main.tf.
-  # "10.100.0.0/24"  = { az = "us-east-1a", set = "mgmt" }
-  # "10.100.64.0/24" = { az = "us-east-1b", set = "mgmt" }
-  "10.100.1.0/24"  = { az = "ca-central-1a", set = "data" }
-  "10.100.65.0/24" = { az = "ca-central-1b", set = "data" }
-  # "10.100.2.0/24"  = { az = "us-east-1a", set = "untrust" }
-  # "10.100.66.0/24" = { az = "us-east-1b", set = "untrust" }
-  # "10.100.3.0/24"  = { az = "us-east-1a", set = "gwlbe_outbound" }
-  # "10.100.67.0/24" = { az = "us-east-1b", set = "gwlbe_outbound" }
-  # "10.100.4.0/24"  = { az = "us-east-1a", set = "gwlb" }
-  # "10.100.68.0/24" = { az = "us-east-1b", set = "gwlb" }
+  "10.100.0.0/24"  = { az = "ca-central-1a", set = "mgmt" }
+  "10.100.64.0/24" = { az = "ca-central-1b", set = "mgmt" }
   "10.100.5.0/24"  = { az = "ca-central-1a", set = "natgw" }
   "10.100.69.0/24" = { az = "ca-central-1b", set = "natgw" }
 }
-
-# Gateway Load Balancer
-# gwlb_name                       = "example-security-gwlb"
-# gwlb_endpoint_set_outbound_name = "outbound-gwlb-endpoint"
 
 ### NAT gateway
 nat_gateway_name = "example-natgw"
@@ -66,10 +54,6 @@ iam_instance_profile = "zsdemo-instance-profile"
 path_to_public_key = "./local.pub"
 bootstrap_options = "./user_data.sh"
 
-# Security VPC routes ###
-security_vpc_routes_outbound_source_cidrs = [ # outbound traffic return after inspection
-  "10.0.0.0/8",
-]
 
 security_vpc_routes_outbound_destin_cidrs = [ # outbound traffic incoming for inspection from TGW
   "0.0.0.0/0",
