@@ -47,7 +47,7 @@ locals {
 
 # Create autoscaling group based on launch template and ALL subnets from var.interfaces
 resource "aws_autoscaling_group" "this" {
-  name                = "${var.name_prefix}${var.asg_name}"
+  name                = "${var.name_prefix}-${var.asg_name}"
   vpc_zone_identifier = distinct([for k, v in var.interfaces : var.subnet_ids[v.subnet_name]])
   desired_capacity    = var.desired_capacity
   max_size            = var.max_size
