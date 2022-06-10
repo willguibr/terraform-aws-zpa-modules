@@ -1,5 +1,5 @@
 # ZPA App Connector VM AMI ID lookup based on version (determined by product code)
-data "aws_ami" "this" {
+data "aws_ami" "zpa_ami" {
   count = var.appconnector_ami_id != null ? 0 : 1
 
   most_recent = true
@@ -19,8 +19,8 @@ data "aws_ami" "this" {
 resource "aws_launch_template" "this" {
   name          = "${var.name_prefix}template1"
   ebs_optimized = true
-  image_id      = data.aws_ami.pa_vm.id
-  instance_type = var.fw_instance_type
+  image_id      = data.aws_ami.zpa_ami.id
+  instance_type = var.instance_type
   key_name      = var.ssh_key_name
   tags          = var.global_tags
 
@@ -47,7 +47,7 @@ locals {
 
 # Create autoscaling group based on launch template and ALL subnets from var.interfaces
 resource "aws_autoscaling_group" "this" {
-  name                = "${var.name_prefix}${var.asg_name}"
+  name                = "${var.name_prefix}-${var.asg_name}"
   vpc_zone_identifier = distinct([for k, v in var.interfaces : var.subnet_ids[v.subnet_name]])
   desired_capacity    = var.desired_capacity
   max_size            = var.max_size
