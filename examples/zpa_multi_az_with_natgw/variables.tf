@@ -6,7 +6,7 @@ variable "security_vpc_name" {}
 variable "security_vpc_cidr" {}
 variable "security_vpc_security_groups" {}
 variable "security_vpc_subnets" {}
-variable "appconnector-vm" {}
+variable "appconnectors" {}
 variable "appconnector_version" {}
 variable "ssh_key_name" {}
 variable "security_vpc_routes_outbound_destin_cidrs" {}

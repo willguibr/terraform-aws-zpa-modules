@@ -30,7 +30,7 @@ module "natgw_set" {
 }
 
 module "appconnector-vm" {
-  for_each = var.appconnector-vm
+  for_each = var.appconnectors
   source   = "../../modules/zpa-appconnector-vm"
 
   name                 = var.name
@@ -42,7 +42,7 @@ module "appconnector-vm" {
     mgmt = {
       device_index       = 0
       security_group_ids = [module.security_vpc.security_group_ids["zpa_app_connector_mgmt"]]
-      source_dest_check  = true
+      source_dest_check  = false
       subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
       create_public_ip   = false
     }
@@ -65,7 +65,7 @@ locals {
         to_cidr      = cidr
       }
     ],
-        [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
+    [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
       {
         subnet_key   = "natgw"
         next_hop_set = module.security_vpc.igw_as_next_hop_set
