@@ -1,30 +1,39 @@
-variable "fw_version" {
-  description = "Select which FW version to deploy."
-  default     = "10.0.3"
+variable "appconnector_version" {
+  description = "ZPA App Connector version to deploy."
+  default     = "2021.06"
 }
 
-variable "fw_license_type" {
-  description = "Select License type (byol/payg1/payg2)."
-  default     = "byol"
-}
+# variable "fw_license_type" {
+#   description = "Select License type (byol/payg1/payg2)."
+#   default     = "byol"
+# }
 
-variable "fw_license_type_map" {
+variable "zpa_product_code" {
   description = <<-EOF
-  Map of the VM-Series Firewall licence types and corresponding VM-Series Firewall Amazon Machine Image (AMI) ID.
-  The key is the licence type, and the value is the VM-Series Firewall AMI ID."
+  Product code corresponding to a chosen App Connector license type model - by default - BYOL.
+  Please refer to the: [ZPA App Connector documentation](https://help.zscaler.com/zpa/connector-deployment-guide-amazon-web-services)
   EOF
   default = {
-    "byol"  = "6njl1pau431dv1qxipg63mvah"
-    "payg1" = "6kxdw3bbmdeda3o6i1ggqt4km"
-    "payg2" = "806j2of0qy5osgjjixq9gqc6g"
+    "byol"  = "3n2udvk6ba2lglockhnetlujo"
+    # "payg1" = "6kxdw3bbmdeda3o6i1ggqt4km"
+    # "payg2" = "806j2of0qy5osgjjixq9gqc6g"
   }
   type = map(string)
 }
 
-variable "fw_instance_type" {
-  description = "EC2 Instance Type."
-  default     = "m5.xlarge"
-  type        = string
+variable instance_type {
+  description = "App Connector Instance Type"
+  default     = "t3.medium"
+  validation {
+          condition     = (
+            var.instance_type == "t3.medium" ||
+            var.instance_type == "t2.medium" ||
+            var.instance_type == "m5.large"  ||
+            var.instance_type == "c5.large"  ||
+            var.instance_type == "c5a.large"
+          )
+          error_message = "Input instance_type must be set to an approved vm instance type."
+      }
 }
 
 variable "name_prefix" {
