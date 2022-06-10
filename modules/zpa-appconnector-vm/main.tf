@@ -70,7 +70,7 @@ resource "aws_iam_role_policy_attachment" "zscaler_policy_attachment" {
   policy_arn = aws_iam_policy.this.arn
 }
 
-resource "aws_iam_instance_profile" "app_connector_profile" {
+resource "aws_iam_instance_profile" "iam_instance_profile" {
   name = "${var.name-prefix}-app_connector_profile-${var.resource-tag}"
   role = aws_iam_role.this.name
 }
@@ -135,7 +135,7 @@ resource "aws_key_pair" "mykey" {
 resource "aws_instance" "this" {
 
   ami                                  = coalesce(var.appconnector_ami_id, try(data.aws_ami.this[0].id, null))
-  iam_instance_profile                 = var.iam_instance_profile
+  iam_instance_profile                 = aws_iam_instance_profile.iam_instance_profile.name
   instance_type                        = var.instance_type
   key_name                             = aws_key_pair.mykey.key_name
 
