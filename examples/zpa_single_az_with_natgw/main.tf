@@ -50,7 +50,8 @@ module "appconnector-vm" {
 
   tags                 = var.global_tags
   zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
-  secure_parameters    = var.secure_parameters
+    parameter_name    = "ZSDEMO"
+  # secure_parameters    = var.secure_parameters
   path_to_public_key   = var.path_to_public_key
 }
 
