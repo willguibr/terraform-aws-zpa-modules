@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 sudo yum install unzip -y
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscli-exe-linux-x86_64.zip
-unzip /tmp/awscli-exe-linux-x86_64.zip -d /tmp
+sudo unzip /tmp/awscli-exe-linux-x86_64.zip -d /tmp
 sudo /tmp/aws/install
 REGION=$(curl http://169.254.169.254/latest/meta-data/placement/region)
 URL="http://169.254.169.254/latest/meta-data/network/interfaces/macs/"

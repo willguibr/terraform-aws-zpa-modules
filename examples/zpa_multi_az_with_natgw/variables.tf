@@ -1,37 +1,10 @@
-<<<<<<< HEAD
-variable "name-prefix" {
-  description = "The name prefix for all your resources"
-  default     = "zsdemo"
-  type        = string
-}
-variable "resource-tag" {
-  description = "A tag to associate to all the App Connector module resources"
-  default     = "zsdemo"
-}
-
-### General
-variable "region" {}
-=======
 # Variables for EC2 Instance
 variable "region" {}
 variable "name" {}
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 variable "global_tags" {}
 variable "security_vpc_name" {}
 variable "security_vpc_cidr" {}
 variable "security_vpc_security_groups" {}
-<<<<<<< HEAD
-variable "security_vpc_routes_outbound_destin_cidrs" {}
-variable "security_vpc_subnets" {}
-variable "create_ssh_key" {}
-variable "ssh_key_name" {}
-variable "nat_gateway_name" {}
-variable "appconnectors" {}
-variable "bootstrap_options" {}
-variable "appconnector_version" {}
-variable "iam_instance_profile" {}
-
-=======
 variable "security_vpc_subnets" {}
 variable "appconnectors" {}
 variable "appconnector_version" {}
@@ -42,7 +15,6 @@ variable "bootstrap_options" {}
 variable "iam_instance_profile" {}
 
 
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 # Variables for ZPA App Connector Group
 variable "app_connector_group_name" {}
 variable "app_connector_group_description" {}
@@ -62,15 +34,6 @@ variable "provisioning_key_name" {}
 variable "provisioning_key_association_type" {}
 variable "provisioning_key_max_usage" {}
 
+# variable "secure_parameters" {}
+variable "path_to_public_key" {}
 
-#aws ssm secure parameter
-<<<<<<< HEAD
-variable "secure_parameters" {}
-variable "path_to_public_key" {}
-=======
-<<<<<<< HEAD:examples/zpa_single_az_with_natgw/variables.tf
-variable "secure_parameters" {}
-=======
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw:examples/zpa_multi_az_with_natgw/variables.tf
-variable "path_to_public_key" {}
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw

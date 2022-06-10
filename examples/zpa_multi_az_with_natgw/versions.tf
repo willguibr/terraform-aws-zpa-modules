@@ -19,9 +19,5 @@ provider "aws" {
 
 provider "zpa" {
 
-<<<<<<< HEAD
-}
-=======
 }
 
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw

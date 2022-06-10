@@ -1,31 +1,15 @@
-<<<<<<< HEAD
-# General
-region = "ca-central-1"
-=======
 # # General
 region = "ca-central-1"
 name   = "zpa-example"
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 global_tags = {
   ManagedBy   = "Terraform"
   Application = "Zscaler Private Access"
 }
 
-<<<<<<< HEAD
-## VPC
-security_vpc_name = "security-vpc-example"
-security_vpc_cidr = "10.100.0.0/16"
-
-# # Security Groups
-security_vpc_security_groups = {
-  appconnector_data = {
-    name = "appconnector_data"
-=======
 # # Security Groups
 security_vpc_security_groups = {
   zpa_app_connector_mgmt = {
     name = "zpa_app_connector_mgmt"
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
     rules = {
       all_outbound = {
         description = "Permit All traffic outbound"
@@ -41,8 +25,6 @@ security_vpc_security_groups = {
   }
 }
 
-<<<<<<< HEAD
-=======
 ### NAT gateway
 nat_gateway_name = "example-natgw"
 
@@ -53,25 +35,10 @@ security_vpc_cidr = "10.100.0.0/16"
 # # Routes
 security_vpc_routes_outbound_destin_cidrs = ["0.0.0.0/0"]
 
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 # Security VPC Subnets
 security_vpc_subnets = {
   # Do not modify value of `set=`, it is an internal identifier referenced by main.tf.
   "10.100.0.0/24"  = { az = "ca-central-1a", set = "mgmt" }
-<<<<<<< HEAD
-  "10.100.64.0/24" = { az = "ca-central-1b", set = "mgmt" }
-  "10.100.5.0/24"  = { az = "ca-central-1a", set = "natgw" }
-  "10.100.69.0/24" = { az = "ca-central-1b", set = "natgw" }
-}
-
-### NAT gateway
-nat_gateway_name = "example-natgw"
-
-# ZPA App Connector
-appconnector_version = "2021.06"
-create_ssh_key   = false
-ssh_key_name     = "ssh"
-=======
   "10.100.5.0/24"  = { az = "ca-central-1a", set = "natgw" }
   "10.100.64.0/24" = { az = "ca-central-1b", set = "mgmt" }
   "10.100.69.0/24" = { az = "ca-central-1b", set = "natgw" }
@@ -80,42 +47,11 @@ ssh_key_name     = "ssh"
 ### ZPA App Connector VM
 appconnector_version = "2021.06"
 ssh_key_name         = "example-ssh-key"
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
 appconnectors = {
   appconnectorvm01 = { az = "ca-central-1a" }
   appconnectorvm02 = { az = "ca-central-1b" }
 }
 
-<<<<<<< HEAD
-secure_parameters  = "ZSDEMO"
-iam_instance_profile = "zsdemo-instance-profile"
-path_to_public_key = "./local.pub"
-bootstrap_options = "./user_data.sh"
-
-
-security_vpc_routes_outbound_destin_cidrs = [ # outbound traffic incoming for inspection from TGW
-  "0.0.0.0/0",
-]
-
-## ZPA App Connector Group
-  app_connector_group_name                     = "zsdemo-app-connector-aws"
-  app_connector_group_description              = "zsdemo-app-connector-aws"
-  app_connector_group_enabled                  = true
-  app_connector_group_country_code             = "US"
-  app_connector_group_latitude                 = "37.3382082"
-  app_connector_group_longitude                = "-121.8863286"
-  app_connector_group_location                 = "San Jose, CA, USA"
-  app_connector_group_upgrade_day              = "SUNDAY"
-  app_connector_group_upgrade_time_in_secs     = "66600"
-  app_connector_group_override_version_profile = true
-  app_connector_group_version_profile_id       = "2"
-  app_connector_group_dns_query_type           = "IPV4_IPV6"
-
-  ## ZPA App Connector Provisioning Key
-  provisioning_key_name             = "zsdemo-app-connector-aws"
-  provisioning_key_association_type = "CONNECTOR_GRP"
-  provisioning_key_max_usage        = 50
-=======
 bootstrap_options    = "user_data.sh"
 iam_instance_profile = "ZPA_Instance_Profile"
 
@@ -142,4 +78,3 @@ provisioning_key_max_usage        = 50
 #aws ssms secure parameter
 # secure_parameters  = "ZSDEMO"
 path_to_public_key = "./local.pub"
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw

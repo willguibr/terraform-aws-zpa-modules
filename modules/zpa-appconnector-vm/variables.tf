@@ -198,19 +198,6 @@ variable "zpa_provisioning_key" {
   type        = string
 }
 
-<<<<<<< HEAD
-variable "secure_parameters" {
-  description = "aws ssm secure parameter"
-  # default     = null
-  type        = string
-}
-
-variable "secure_parameter_type" {
-  description = "Type of the SSM parameter"
-  default     = "SecureString"
-  type        = string
-}
-=======
 # variable "secure_parameters" {
 #   description = "aws ssm secure parameter"
 #   default     = null
@@ -220,4 +207,3 @@ variable "secure_parameter_type" {
 variable "create_secure_parameter" { default = true }
 variable "parameter_name" { default = null }
 variable "parameter_description" { default = null }
->>>>>>> zpa-#4-v0.0.1-single-az-with-natgw
