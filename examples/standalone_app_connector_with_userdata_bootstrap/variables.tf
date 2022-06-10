@@ -10,6 +10,7 @@ variable "appconnector-vm" {}
 variable "appconnector_version" {}
 variable "ssh_key_name" {}
 variable "security_vpc_routes_outbound_destin_cidrs" {}
+variable "nat_gateway_name" {}
 variable "bootstrap_options" {}
 variable "iam_instance_profile" {}
 
@@ -36,5 +37,5 @@ variable "provisioning_key_max_usage" {}
 
 
 #aws ssm secure parameter
-variable "secure_parameters"  {}
+variable "secure_parameters" {}
 variable "path_to_public_key" {}
