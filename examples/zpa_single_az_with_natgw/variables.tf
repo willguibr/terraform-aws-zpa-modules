@@ -10,9 +10,9 @@ variable "appconnector-vm" {}
 variable "appconnector_version" {}
 variable "ssh_key_name" {}
 variable "security_vpc_routes_outbound_destin_cidrs" {}
+variable "nat_gateway_name" {}
 variable "bootstrap_options" {}
 variable "iam_instance_profile" {}
-
 
 # Variables for ZPA App Connector Group
 variable "app_connector_group_name" {}
@@ -28,11 +28,11 @@ variable "app_connector_group_override_version_profile" {}
 variable "app_connector_group_version_profile_id" {}
 variable "app_connector_group_dns_query_type" {}
 
+
 # Variables for ZPA Provisioning Key
 variable "provisioning_key_name" {}
 variable "provisioning_key_association_type" {}
 variable "provisioning_key_max_usage" {}
-
 
 #aws ssm secure parameter
 variable "secure_parameters" {}

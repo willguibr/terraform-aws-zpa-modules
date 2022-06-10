@@ -10,13 +10,11 @@ module "security_vpc" {
   instance_tenancy        = "default"
 }
 
+
 module "security_subnet_sets" {
-  # The "set" here means we will repeat in each AZ an identical/similar subnet.
-  # The notion of "set" is used a lot here, it extends to routes, routes' next hops,
-  # gwlb endpoints and any other resources which would be a single point of failure when placed
-  # in a single AZ.
+  source = "../../modules/subnet_set"
+
   for_each = toset(distinct([for _, v in var.security_vpc_subnets : v.set]))
-  source   = "../../modules/subnet_set"
 
   name                = each.key
   vpc_id              = module.security_vpc.id
@@ -31,36 +29,43 @@ module "natgw_set" {
   subnets = module.security_subnet_sets["natgw"].subnets
 }
 
-# ZPA Instances
 module "appconnector-vm" {
-  source = "../../modules/zpa-appconnector-vm"
+  source   = "../../modules/zpa-appconnector-vm"
 
   for_each = var.appconnectors
 
-  name                  = each.key
-  tags                  = var.global_tags
-  ssh_key_name          = "${var.ssh_key_name}-key${var.name-prefix}"
-  # ssh_key_name =      "${var.ssh_key_name}-key-${random_string.suffix.result}"
-  iam_instance_profile = var.iam_instance_profile
+  name                 = each.key
+  ssh_key_name         = var.ssh_key_name
   bootstrap_options    = var.bootstrap_options
-  appconnector_version  = var.appconnector_version
-  zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
-  secure_parameters    = var.secure_parameters
-  path_to_public_key   = var.path_to_public_key
-
+  iam_instance_profile = var.iam_instance_profile
+  appconnector_version = var.appconnector_version
   interfaces = {
-    data = {
+    mgmt = {
       device_index       = 0
-      security_group_ids = [module.security_vpc.security_group_ids["appconnector_data"]]
-      source_dest_check  = false
-      subnet_id          = module.security_subnet_sets["data"].subnets[each.value.az].id
-      create_public_ip   = true
+      security_group_ids = [module.security_vpc.security_group_ids["zpa_app_connector_mgmt"]]
+      source_dest_check  = true
+      subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
+      create_public_ip   = false
     }
   }
+
+  tags                 = var.global_tags
+  zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
+  parameter_name    = "ZSDEMO"
+  path_to_public_key   = var.path_to_public_key
 }
+
+
 
 locals {
   security_vpc_routes = concat(
+    [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
+      {
+        subnet_key   = "mgmt"
+        next_hop_set = module.natgw_set.next_hop_set
+        to_cidr      = cidr
+      }
+    ],
     [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
       {
         subnet_key   = "natgw"
@@ -68,18 +73,9 @@ locals {
         to_cidr      = cidr
       }
     ],
-    [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
-      {
-        subnet_key   = "data"
-        next_hop_set = module.natgw_set.next_hop_set
-        # next_hop_set = module.security_vpc.igw_as_next_hop_set
-        to_cidr      = cidr
-      }
-    ],
   )
 }
 
-# Security VPC Routes
 module "security_vpc_routes" {
   for_each = { for route in local.security_vpc_routes : "${route.subnet_key}_${route.to_cidr}" => route }
   source   = "../../modules/vpc_route"
@@ -90,7 +86,7 @@ module "security_vpc_routes" {
 }
 
 module "zpa_app_connector_group" {
-  source   = "../../modules/zpa_app_connector_group"
+  source = "../../modules/zpa_app_connector_group"
 
   app_connector_group_name                 = var.app_connector_group_name
   app_connector_group_description          = var.app_connector_group_description
@@ -104,7 +100,6 @@ module "zpa_app_connector_group" {
   app_connector_group_version_profile_id   = var.app_connector_group_version_profile_id
   app_connector_group_dns_query_type       = var.app_connector_group_dns_query_type
 
-  # Variables for the Provisioning Key
   provisioning_key_name             = var.provisioning_key_name
   provisioning_key_association_type = var.provisioning_key_association_type
   provisioning_key_max_usage        = var.provisioning_key_max_usage
