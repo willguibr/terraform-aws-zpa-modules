@@ -1,5 +1,5 @@
 # terraform-best-practices
-### Welcome! This repo contains a set of best practices to be followed when contributing to the Palo Alto Networks terraform modules used by Professional Services.
+### Welcome! This repo contains a set of best practices to be followed when contributing to the Zscaler Private Access terraform modules.
 
 
 ## Table of Contents
