@@ -25,6 +25,9 @@ security_vpc_security_groups = {
   }
 }
 
+### NAT gateway
+nat_gateway_name = "example-natgw"
+
 # # VPC
 security_vpc_name = "security-vpc-example"
 security_vpc_cidr = "10.100.0.0/16"
@@ -36,13 +39,10 @@ security_vpc_routes_outbound_destin_cidrs = ["0.0.0.0/0"]
 security_vpc_subnets = {
   # Do not modify value of `set=`, it is an internal identifier referenced by main.tf.
   "10.100.0.0/24"  = { az = "ca-central-1a", set = "mgmt" }
-  "10.100.64.0/24" = { az = "ca-central-1b", set = "mgmt" }
   "10.100.5.0/24"  = { az = "ca-central-1a", set = "natgw" }
+  "10.100.64.0/24" = { az = "ca-central-1b", set = "mgmt" }
   "10.100.69.0/24" = { az = "ca-central-1b", set = "natgw" }
 }
-
-### NAT gateway
-nat_gateway_name = "example-natgw"
 
 ### ZPA App Connector VM
 appconnector_version = "2021.06"
@@ -76,5 +76,5 @@ provisioning_key_association_type = "CONNECTOR_GRP"
 provisioning_key_max_usage        = 50
 
 #aws ssms secure parameter
-secure_parameters  = "ZSDEMO"
+# secure_parameters  = "ZSDEMO"
 path_to_public_key = "./local.pub"

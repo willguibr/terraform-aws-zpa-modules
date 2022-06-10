@@ -30,10 +30,11 @@ module "natgw_set" {
 }
 
 module "appconnector-vm" {
-  for_each = var.appconnectors
   source   = "../../modules/zpa-appconnector-vm"
 
-  name                 = var.name
+  for_each = var.appconnectors
+
+  name                 = each.key
   ssh_key_name         = var.ssh_key_name
   bootstrap_options    = var.bootstrap_options
   iam_instance_profile = var.iam_instance_profile
@@ -42,7 +43,7 @@ module "appconnector-vm" {
     mgmt = {
       device_index       = 0
       security_group_ids = [module.security_vpc.security_group_ids["zpa_app_connector_mgmt"]]
-      source_dest_check  = false
+      source_dest_check  = true
       subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
       create_public_ip   = false
     }
@@ -50,7 +51,7 @@ module "appconnector-vm" {
 
   tags                 = var.global_tags
   zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
-  secure_parameters    = var.secure_parameters
+  parameter_name    = "ZSDEMO"
   path_to_public_key   = var.path_to_public_key
 }
 

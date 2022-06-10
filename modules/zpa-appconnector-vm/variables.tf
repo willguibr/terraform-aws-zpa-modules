@@ -206,8 +206,12 @@ variable "zpa_provisioning_key" {
   type        = string
 }
 
-variable "secure_parameters" {
-  description = "aws ssm secure parameter"
-  default     = null
-  type        = string
-}
+# variable "secure_parameters" {
+#   description = "aws ssm secure parameter"
+#   default     = null
+#   type        = string
+# }
+
+variable "create_secure_parameter" { default = true }
+variable "parameter_name" { default = null }
+variable "parameter_description" { default = null }

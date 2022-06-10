@@ -37,5 +37,4 @@ variable "provisioning_key_max_usage" {}
 
 
 #aws ssm secure parameter
-variable "secure_parameters" {}
 variable "path_to_public_key" {}

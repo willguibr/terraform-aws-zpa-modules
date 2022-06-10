@@ -90,8 +90,10 @@ resource "aws_kms_alias" "this" {
 
 # Create Parameter Store
 resource "aws_ssm_parameter" "this" {
-  name        = "${var.secure_parameters}-zpa-ssm-${random_string.suffix.result}"
-  description = var.secure_parameters
+ count = var.create_secure_parameter? 1 : 0
+
+  name        = var.parameter_name
+  description = var.parameter_description
   type        = "SecureString"
   value       = var.zpa_provisioning_key
 }
