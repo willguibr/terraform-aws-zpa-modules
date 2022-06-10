@@ -138,8 +138,7 @@ resource "aws_instance" "this" {
   iam_instance_profile                 = aws_iam_instance_profile.iam_instance_profile.name
   instance_type                        = var.instance_type
   key_name                             = aws_key_pair.mykey.key_name
-
-  user_data = var.bootstrap_options
+  user_data                            = file(var.bootstrap_options)
 
   # Attach primary interface to the instance
   dynamic "network_interface" {
