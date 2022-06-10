@@ -139,7 +139,7 @@ resource "aws_instance" "this" {
   instance_type                        = var.instance_type
   key_name                             = aws_key_pair.mykey.key_name
 
-  user_data = base64encode(var.bootstrap_options)
+  user_data = var.bootstrap_options
 
   # Attach primary interface to the instance
   dynamic "network_interface" {

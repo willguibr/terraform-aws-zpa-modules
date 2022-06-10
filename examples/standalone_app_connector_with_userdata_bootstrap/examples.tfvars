@@ -72,5 +72,5 @@ iam_instance_profile = "ZPA_Instance_Profile"
   provisioning_key_max_usage        = 50
 
   #aws ssms secure parameter
-  secure_parameters = "demo"
-  path_to_public_key = "./sshkey.pub"
+  secure_parameters = "ZSDEMO"
+  path_to_public_key = "./local.pub"
