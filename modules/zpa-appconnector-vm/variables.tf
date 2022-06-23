@@ -215,3 +215,17 @@ variable "zpa_provisioning_key" {
 variable "create_secure_parameter" { default = true }
 variable "parameter_name" { default = null }
 variable "parameter_description" { default = null }
+
+variable "configs" { 
+ description = "key/valye pair to create in the SSM parameter store"
+ type = map(string)
+ default = {
+   parameter_name = "ZSDEMO1"
+   parameter_address = "ZSDEMO1 Address"
+   parameter_key = "ZSDEMO1 key"
+   parameter_email = "ZSDEMO1 email"
+   parameter_opt = "ZSDEMO1 optional"
+ }
+}
+
+variable "prefix" { default = "dev" }
