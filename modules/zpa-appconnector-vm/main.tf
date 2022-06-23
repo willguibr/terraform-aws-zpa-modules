@@ -90,12 +90,21 @@ resource "aws_kms_alias" "this" {
 
 # Create Parameter Store
 resource "aws_ssm_parameter" "this" {
- count = var.create_secure_parameter? 1 : 0
-
-  name        = var.parameter_name
+  count       = "${length(keys(var.configs))}"
+  name        = "/${var.prefix}/${element(keys(var.configs),count.index)}"
   description = var.parameter_description
   type        = "SecureString"
   value       = var.zpa_provisioning_key
+  key_id      = aws_kms_key.this.key_id
+  overwrite   = true
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
+
+
+
 }
 
 # Network Interfaces
