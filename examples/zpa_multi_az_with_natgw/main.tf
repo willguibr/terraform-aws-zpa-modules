@@ -50,7 +50,7 @@ module "appconnector-vm" {
   }
 
   tags                 = var.global_tags
-  zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
+  # zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
   parameter_name    = "ZSDEMO"
   path_to_public_key   = var.path_to_public_key
 }
@@ -85,22 +85,22 @@ module "security_vpc_routes" {
   next_hop_set    = each.value.next_hop_set
 }
 
-module "zpa_app_connector_group" {
+module "app_connector_groups" {
   source = "../../modules/zpa_app_connector_group"
 
-  app_connector_group_name                 = var.app_connector_group_name
-  app_connector_group_description          = var.app_connector_group_description
-  app_connector_group_enabled              = var.app_connector_group_enabled
-  app_connector_group_country_code         = var.app_connector_group_country_code
-  app_connector_group_latitude             = var.app_connector_group_latitude
-  app_connector_group_longitude            = var.app_connector_group_longitude
-  app_connector_group_location             = var.app_connector_group_location
-  app_connector_group_upgrade_day          = var.app_connector_group_upgrade_day
-  app_connector_group_upgrade_time_in_secs = var.app_connector_group_upgrade_time_in_secs
-  app_connector_group_version_profile_id   = var.app_connector_group_version_profile_id
-  app_connector_group_dns_query_type       = var.app_connector_group_dns_query_type
+  for_each = { for app_connector_group in var.app_connector_groups : app_connector_group.app_connector_group_name => app_connector_group }
 
-  provisioning_key_name             = var.provisioning_key_name
-  provisioning_key_association_type = var.provisioning_key_association_type
-  provisioning_key_max_usage        = var.provisioning_key_max_usage
+  name                     = each.key
+  description              = each.value.app_connector_group_description
+  enabled                  = each.value.app_connector_group_enabled
+  country_code             = each.value.app_connector_group_country_code
+  dns_query_type           = each.value.app_connector_group_dns_query_type
+  latitude                 = each.value.app_connector_group_latitude
+  longitude                = each.value.app_connector_group_longitude
+  location                 = each.value.app_connector_group_location
+  lss_app_connector_group  = each.value.app_connector_group_lss_app_connector_group
+  override_version_profile = each.value.app_connector_group_override_version_profile
+  upgrade_day              = each.value.app_connector_group_upgrade_day
+  upgrade_time_in_secs     = each.value.app_connector_group_upgrade_time_in_secs
+  version_profile_id       = each.value.app_connector_group_version_profile_id
 }

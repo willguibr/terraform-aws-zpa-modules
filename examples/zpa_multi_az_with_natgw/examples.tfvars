@@ -55,25 +55,33 @@ appconnectors = {
 bootstrap_options    = "user_data.sh"
 iam_instance_profile = "ZPA_Instance_Profile"
 
-# # ZPA App Connector Group
-app_connector_group_name                     = "zsdemo-app-connector-aws"
-app_connector_group_description              = "zsdemo-app-connector-aws"
-app_connector_group_enabled                  = true
-app_connector_group_country_code             = "US"
-app_connector_group_latitude                 = "37.3382082"
-app_connector_group_longitude                = "-121.8863286"
-app_connector_group_location                 = "San Jose, CA, USA"
-app_connector_group_upgrade_day              = "SUNDAY"
-app_connector_group_upgrade_time_in_secs     = "66600"
-app_connector_group_override_version_profile = true
-app_connector_group_version_profile_id       = "2"
-app_connector_group_dns_query_type           = "IPV4_IPV6"
+# provisioning_key_connector_group = [
+#   {
+#     provisioning_key_name             = "Test_ZPA_Module01"
+#     provisioning_key_enabled          = true
+#     provisioning_key_association_type = "CONNECTOR_GRP"
+#     provisioning_key_max_usage        = "50"
+#   }
+# ]
 
+app_connector_groups = [
+  {
+    app_connector_group_name                     = "Test_ZPA_Module01"
+    app_connector_group_description              = "Test_ZPA_Module"
+    app_connector_group_enabled                  = true
+    app_connector_group_country_code             = "CA"
+    app_connector_group_dns_query_type           = "IPV4"
+    app_connector_group_latitude                 = "37.3382082"
+    app_connector_group_longitude                = "-121.8863286"
+    app_connector_group_location                 = "San Jose, CA, USA"
+    app_connector_group_lss_app_connector_group  = false
+    app_connector_group_override_version_profile = true
+    app_connector_group_upgrade_day              = "SUNDAY"
+    app_connector_group_upgrade_time_in_secs     = "66600"
+    app_connector_group_version_profile_id       = "2"
+  }
+]
 
-# # ZPA App Connector Provisioning Key
-provisioning_key_name             = "zsdemo-app-connector-aws"
-provisioning_key_association_type = "CONNECTOR_GRP"
-provisioning_key_max_usage        = 50
 
 #aws ssms secure parameter
 # secure_parameters  = "ZSDEMO"

@@ -14,26 +14,24 @@ variable "nat_gateway_name" {}
 variable "bootstrap_options" {}
 variable "iam_instance_profile" {}
 
-
-# Variables for ZPA App Connector Group
-variable "app_connector_group_name" {}
-variable "app_connector_group_description" {}
-variable "app_connector_group_enabled" {}
-variable "app_connector_group_country_code" {}
-variable "app_connector_group_latitude" {}
-variable "app_connector_group_longitude" {}
-variable "app_connector_group_location" {}
-variable "app_connector_group_upgrade_day" {}
-variable "app_connector_group_upgrade_time_in_secs" {}
-variable "app_connector_group_override_version_profile" {}
-variable "app_connector_group_version_profile_id" {}
-variable "app_connector_group_dns_query_type" {}
-
-
-# Variables for ZPA Provisioning Key
-variable "provisioning_key_name" {}
-variable "provisioning_key_association_type" {}
-variable "provisioning_key_max_usage" {}
+variable "app_connector_groups" {
+  description = "ZPA App Connector Groups"
+  type = list(object({
+    app_connector_group_name                     = string
+    app_connector_group_description              = string
+    app_connector_group_enabled                  = bool
+    app_connector_group_country_code             = string
+    app_connector_group_dns_query_type           = string
+    app_connector_group_latitude                 = string
+    app_connector_group_longitude                = string
+    app_connector_group_location                 = string
+    app_connector_group_lss_app_connector_group  = bool
+    app_connector_group_override_version_profile = bool
+    app_connector_group_upgrade_day              = string
+    app_connector_group_upgrade_time_in_secs     = string
+    app_connector_group_version_profile_id       = string
+  }))
+}
 
 
 #aws ssm secure parameter
