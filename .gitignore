@@ -15,6 +15,8 @@
 # .netrc contains secrets for service tokens
 .netrc
 *.plan
+*.tfplan
+.tfplan
 .sentinel
 # .ssh dir may contain private keys
 .ssh
