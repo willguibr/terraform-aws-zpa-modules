@@ -96,7 +96,29 @@ resource "aws_ssm_parameter" "this" {
   description = var.parameter_description
   type        = "SecureString"
   value       = var.zpa_provisioning_key
+  overwrite   = true
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
 }
+
+# Create Parameter Store
+# resource "aws_ssm_parameter" "this" {
+#   count       = "${length(keys(var.configs))}"
+#   name        = "/${var.prefix}/${element(keys(var.configs),count.index)}"
+#   description = var.parameter_description
+#   type        = "SecureString"
+#   value       = var.zpa_provisioning_key
+#   key_id      = aws_kms_key.this.key_id
+#   overwrite   = true
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#     ]
+#   }
+# }
 
 # Network Interfaces
 resource "aws_network_interface" "this" {
