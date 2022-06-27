@@ -94,7 +94,7 @@ resource "aws_ssm_parameter" "this" {
   name        = "/${var.prefix}/${element(keys(var.configs),count.index)}"
   description = var.parameter_description
   type        = "SecureString"
-  value       = "${element(values(var.configs),count.index)}"
+  value       = "${var.zpa_provisioning_key}"
   key_id      = aws_kms_key.this.key_id
   overwrite   = true
   lifecycle {
