@@ -220,7 +220,7 @@ variable "configs" {
  description = "key/valye pair to create in the SSM parameter store"
  type = map(string)
  default = {
-   parameter_name = "ZSDEMO1"
+   zsdemo1 = "default value"
    parameter_address = "ZSDEMO1 Address"
    parameter_key = "ZSDEMO1 key"
    parameter_email = "ZSDEMO1 email"
