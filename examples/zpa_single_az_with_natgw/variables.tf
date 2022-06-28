@@ -15,8 +15,8 @@ variable "bootstrap_options" {}
 variable "iam_instance_profile" {}
 
 # Variables for ZPA App Connector Group
-variable "app_connector_group_name" {}
-variable "app_connector_group_description" {}
+# variable "app_connector_group_name" {}
+# variable "app_connector_group_description" {}
 variable "app_connector_group_enabled" {}
 variable "app_connector_group_country_code" {}
 variable "app_connector_group_latitude" {}
@@ -30,10 +30,10 @@ variable "app_connector_group_dns_query_type" {}
 
 
 # Variables for ZPA Provisioning Key
-variable "provisioning_key_name" {}
+# variable "provisioning_key_name" {}
 variable "provisioning_key_association_type" {}
 variable "provisioning_key_max_usage" {}
 
 #aws ssm secure parameter
-variable "secure_parameters" {}
+# variable "secure_parameters" {}
 variable "path_to_public_key" {}

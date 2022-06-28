@@ -200,11 +200,11 @@ variable "interfaces" {
   type = map(any)
 }
 
-variable "zpa_provisioning_key" {
-  description = "zpa provisioning key"
-  default     = null
-  type        = string
-}
+# variable "zpa_provisioning_key" {
+#   description = "zpa provisioning key"
+#   default     = null
+#   type        = string
+# }
 
 # variable "secure_parameters" {
 #   description = "aws ssm secure parameter"
@@ -212,6 +212,6 @@ variable "zpa_provisioning_key" {
 #   type        = string
 # }
 
-variable "create_secure_parameter" { default = true }
-variable "parameter_name" { default = null }
-variable "parameter_description" { default = null }
+# variable "create_secure_parameter" { default = true }
+# variable "parameter_name" { default = null }
+# variable "parameter_description" { default = null }

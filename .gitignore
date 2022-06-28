@@ -32,10 +32,6 @@
 .idea
 .idea
 
-<<<<<<< HEAD
-=======
-
->>>>>>> feature_aws_fix
 # Crash log files
 crash.log
 credentials.json
@@ -50,3 +46,4 @@ terraform.tfvars.json
 
 /local_test
 local.pub
+local

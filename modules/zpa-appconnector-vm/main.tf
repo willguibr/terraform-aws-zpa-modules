@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     effect    = "Allow"
     actions   = ["ssm:GetParameter"]
-    resources = ["arn:aws:ssm:*:*:parameter/ZSDEMO*"]
+    resources = ["arn:aws:ssm:*:*:parameter/ZSAC*"]
   }
 }
 
@@ -89,20 +89,20 @@ resource "aws_kms_alias" "this" {
 }
 
 # Create Parameter Store
-resource "aws_ssm_parameter" "this" {
- count = var.create_secure_parameter? 1 : 0
+# resource "aws_ssm_parameter" "this" {
+#  count = var.create_secure_parameter? 1 : 0
 
-  name        = var.parameter_name
-  description = var.parameter_description
-  type        = "SecureString"
-  value       = var.zpa_provisioning_key
-  overwrite   = true
-  lifecycle {
-    ignore_changes = [
-      value,
-    ]
-  }
-}
+#   name        = var.parameter_name
+#   description = var.parameter_description
+#   type        = "SecureString"
+#   value       = var.zpa_provisioning_key
+#   overwrite   = true
+#   lifecycle {
+#     ignore_changes = [
+#       value,
+#     ]
+#   }
+# }
 
 # Create Parameter Store
 # resource "aws_ssm_parameter" "this" {

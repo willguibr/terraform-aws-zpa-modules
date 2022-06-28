@@ -10,7 +10,6 @@ module "security_vpc" {
   instance_tenancy        = "default"
 }
 
-
 module "security_subnet_sets" {
   source = "../../modules/subnet_set"
 
@@ -49,13 +48,8 @@ module "appconnector-vm" {
   }
 
   tags                 = var.global_tags
-  zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
-    parameter_name    = "ZSDEMO"
-  # secure_parameters    = var.secure_parameters
   path_to_public_key   = var.path_to_public_key
 }
-
-
 
 locals {
   security_vpc_routes = concat(
@@ -88,8 +82,8 @@ module "security_vpc_routes" {
 module "zpa_app_connector_group" {
   source = "../../modules/zpa_app_connector_group"
 
-  app_connector_group_name                 = var.app_connector_group_name
-  app_connector_group_description          = var.app_connector_group_description
+  app_connector_group_name                 = "ZSAC-${var.region}-${module.security_vpc.id}"
+  app_connector_group_description          = "ZSAC-${var.region}-${module.security_vpc.id}"
   app_connector_group_enabled              = var.app_connector_group_enabled
   app_connector_group_country_code         = var.app_connector_group_country_code
   app_connector_group_latitude             = var.app_connector_group_latitude
@@ -100,7 +94,21 @@ module "zpa_app_connector_group" {
   app_connector_group_version_profile_id   = var.app_connector_group_version_profile_id
   app_connector_group_dns_query_type       = var.app_connector_group_dns_query_type
 
-  provisioning_key_name             = var.provisioning_key_name
+  provisioning_key_name             = "ZSAC-${var.region}-${module.security_vpc.id}"
   provisioning_key_association_type = var.provisioning_key_association_type
   provisioning_key_max_usage        = var.provisioning_key_max_usage
+}
+
+# Create Parameter Store
+resource "aws_ssm_parameter" "this" {
+  name = "ZSAC-${var.region}-${module.security_vpc.id}"
+  description = "ZSAC-${var.region}-${module.security_vpc.id}"
+  type        = "SecureString"
+  value       = module.zpa_app_connector_group.provisioning_key
+  overwrite   = true
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
 }
