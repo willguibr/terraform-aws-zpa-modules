@@ -52,3 +52,4 @@ terraform.tfvars.json
 
 /local_test
 local.pub
+local

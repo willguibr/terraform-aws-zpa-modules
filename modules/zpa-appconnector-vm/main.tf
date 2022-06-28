@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     effect    = "Allow"
     actions   = ["ssm:GetParameter"]
-    resources = ["arn:aws:ssm:*:*:parameter/ZSDEMO*"]
+    resources = ["arn:aws:ssm:*:*:parameter/ZSAC*"]
   }
 }
 
@@ -57,15 +57,7 @@ resource "aws_iam_policy" "this" {
   description = var.iam_policy
   policy      = data.aws_iam_policy_document.this.json
 }
-# Creates/manages KMS CMK
-resource "aws_kms_key" "this" {
-  description              = var.description
-  customer_master_key_spec = var.key_spec
-  deletion_window_in_days  = var.customer_master_key_spec
-  is_enabled               = var.enabled
-  enable_key_rotation      = var.rotation_enabled
-  multi_region             = var.multi_region
-}
+
 
 resource "aws_iam_role" "this" {
   name               = "${var.aws_iam_role}-zpa-role-${random_string.suffix.result}"
@@ -80,22 +72,6 @@ resource "aws_iam_role_policy_attachment" "zscaler_policy_attachment" {
 resource "aws_iam_instance_profile" "iam_instance_profile" {
   name = "${var.name-prefix}-zpa-profile-${random_string.suffix.result}"
   role = aws_iam_role.this.name
-}
-
-# Create an alias to the key
-resource "aws_kms_alias" "this" {
-  name          = "alias/${var.kms_alias}-zpa-kms-${random_string.suffix.result}"
-  target_key_id = aws_kms_key.this.key_id
-}
-
-# Create Parameter Store
-resource "aws_ssm_parameter" "this" {
- count = var.create_secure_parameter? 1 : 0
-
-  name        = var.parameter_name
-  description = var.parameter_description
-  type        = "SecureString"
-  value       = var.zpa_provisioning_key
 }
 
 # Network Interfaces

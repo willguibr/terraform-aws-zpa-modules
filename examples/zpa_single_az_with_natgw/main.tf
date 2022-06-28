@@ -1,3 +1,9 @@
+resource "random_string" "suffix" {
+  length  = 8
+  upper   = false
+  special = false
+}
+
 module "security_vpc" {
   source = "../../modules/vpc"
 
@@ -47,10 +53,9 @@ module "appconnector-vm" {
       create_public_ip   = false
     }
   }
-
   tags                 = var.global_tags
-  zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
-  secure_parameters    = var.secure_parameters
+  # zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
+  # secure_parameters    = var.secure_parameters
   path_to_public_key   = var.path_to_public_key
 }
 
@@ -87,8 +92,8 @@ module "security_vpc_routes" {
 module "zpa_app_connector_group" {
   source = "../../modules/zpa_app_connector_group"
 
-  app_connector_group_name                 = var.app_connector_group_name
-  app_connector_group_description          = var.app_connector_group_description
+  app_connector_group_name                 = "ZSAC-${var.region}-${module.security_vpc.id}"
+  app_connector_group_description          = "ZSAC-${var.region}-${module.security_vpc.id}"
   app_connector_group_enabled              = var.app_connector_group_enabled
   app_connector_group_country_code         = var.app_connector_group_country_code
   app_connector_group_latitude             = var.app_connector_group_latitude
@@ -99,7 +104,39 @@ module "zpa_app_connector_group" {
   app_connector_group_version_profile_id   = var.app_connector_group_version_profile_id
   app_connector_group_dns_query_type       = var.app_connector_group_dns_query_type
 
-  provisioning_key_name             = var.provisioning_key_name
+  provisioning_key_name             = "ZSAC-${var.region}-${module.security_vpc.id}"
   provisioning_key_association_type = var.provisioning_key_association_type
   provisioning_key_max_usage        = var.provisioning_key_max_usage
+}
+
+# Creates/manages KMS CMK
+resource "aws_kms_key" "this" {
+  description              = "ZSAC-${var.region}-KMS"
+  customer_master_key_spec = var.key_spec
+  deletion_window_in_days  = var.customer_master_key_spec
+  is_enabled               = var.is_enabled
+  enable_key_rotation      = var.rotation_enabled
+  multi_region             = var.multi_region
+}
+
+# Create an alias to the key
+resource "aws_kms_alias" "this" {
+  name          = "alias/${var.kms_alias}-zpa-kms-${random_string.suffix.result}"
+  target_key_id = aws_kms_key.this.key_id
+}
+
+# Create Parameter Store
+resource "aws_ssm_parameter" "this" {
+  name = "ZSAC-${var.region}-${module.security_vpc.id}"
+  description = "ZSAC-${var.region}-${module.security_vpc.id}"
+  type        = "SecureString"
+  value       = module.zpa_app_connector_group.provisioning_key
+  key_id      = aws_kms_key.this.key_id
+  overwrite   = true
+
+  lifecycle {
+    ignore_changes = [
+      value,
+    ]
+  }
 }

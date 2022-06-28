@@ -41,12 +41,6 @@ variable "description" {
   type        = string
 }
 
-variable "multi_region" {
-  description = "Enable Multi-Region KMS"
-  default     = true
-  type        = bool
-}
-
 # App Connector version setup
 variable "appconnector_ami_id" {
   description = <<-EOF
@@ -110,38 +104,6 @@ variable "path_to_public_key" {
   description = "path to the ssh public key"
   type        = string
 }
-
-
-# Options available
-# SYMMETRIC_DEFAULT, RSA_2048, RSA_3072,
-# RSA_4096, ECC_NIST_P256, ECC_NIST_P384,
-# ECC_NIST_P521, or ECC_SECG_P256K1
-variable "key_spec" {
-  default = "SYMMETRIC_DEFAULT"
-  type    = string
-}
-
-variable "enabled" {
-  default = true
-  type    = bool
-}
-
-variable "rotation_enabled" {
-  default = false
-  type    = bool
-}
-
-variable "customer_master_key_spec" {
-  default = 30
-  type    = number
-}
-
-variable "kms_alias" {
-  description = "KMS Alias"
-  default = "Zscaler_KMS_SSM01"
-  type        = string
-}
-
 
 variable "bootstrap_options" {
   default     = "user_data.sh"

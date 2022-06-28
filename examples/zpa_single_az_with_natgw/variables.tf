@@ -13,11 +13,11 @@ variable "security_vpc_routes_outbound_destin_cidrs" {}
 variable "nat_gateway_name" {}
 variable "bootstrap_options" {}
 variable "iam_instance_profile" {}
-
+variable "path_to_public_key" {}
 
 # Variables for ZPA App Connector Group
-variable "app_connector_group_name" {}
-variable "app_connector_group_description" {}
+# variable "app_connector_group_name" {}
+# variable "app_connector_group_description" {}
 variable "app_connector_group_enabled" {}
 variable "app_connector_group_country_code" {}
 variable "app_connector_group_latitude" {}
@@ -31,11 +31,47 @@ variable "app_connector_group_dns_query_type" {}
 
 
 # Variables for ZPA Provisioning Key
-variable "provisioning_key_name" {}
+# variable "provisioning_key_name" {}
 variable "provisioning_key_association_type" {}
 variable "provisioning_key_max_usage" {}
 
 
 #aws ssm secure parameter
-variable "secure_parameters" {}
-variable "path_to_public_key" {}
+variable "rotation_enabled" {
+  default = false
+  type    = bool
+}
+
+variable "customer_master_key_spec" {
+  default = 30
+  type    = number
+}
+
+variable "kms_alias" {
+  description = "KMS Alias"
+  default = "Zscaler_KMS_SSM01"
+  type        = string
+}
+
+variable "is_enabled" {
+  default = true
+  type    = bool
+}
+# Options available
+# SYMMETRIC_DEFAULT, RSA_2048, RSA_3072,
+# RSA_4096, ECC_NIST_P256, ECC_NIST_P384,
+# ECC_NIST_P521, or ECC_SECG_P256K1
+variable "key_spec" {
+  default = "SYMMETRIC_DEFAULT"
+  type    = string
+}
+
+variable "multi_region" {
+  description = "Enable Multi-Region KMS"
+  default     = true
+  type        = bool
+}
+
+
+
+
