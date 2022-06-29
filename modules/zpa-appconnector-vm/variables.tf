@@ -1,9 +1,3 @@
-# aws variables
-/*
-variable "region" {
-  description = "The AWS region."
-  type = string
-}*/
 variable "name" {
   description = "Name of the App Connector instance."
   default     = null
@@ -32,19 +26,6 @@ variable "aws_iam_role" {
   description = "Zscaler_SSM_IAM_Role"
   default     = "Zscaler_SSM_IAM_Role"
   type        = string
-}
-
-# KMS Key Variables
-variable "description" {
-  description = "Zscaler_KMS_Key"
-  default     = "Zscaler_KMS_Key"
-  type        = string
-}
-
-variable "multi_region" {
-  description = "Enable Multi-Region KMS"
-  default     = true
-  type        = bool
 }
 
 # App Connector version setup
@@ -111,38 +92,6 @@ variable "path_to_public_key" {
   type        = string
 }
 
-
-# Options available
-# SYMMETRIC_DEFAULT, RSA_2048, RSA_3072,
-# RSA_4096, ECC_NIST_P256, ECC_NIST_P384,
-# ECC_NIST_P521, or ECC_SECG_P256K1
-variable "key_spec" {
-  default = "SYMMETRIC_DEFAULT"
-  type    = string
-}
-
-variable "enabled" {
-  default = true
-  type    = bool
-}
-
-variable "rotation_enabled" {
-  default = false
-  type    = bool
-}
-
-variable "customer_master_key_spec" {
-  default = 30
-  type    = number
-}
-
-variable "kms_alias" {
-  description = "KMS Alias"
-  default = "Zscaler_KMS_SSM01"
-  type        = string
-}
-
-
 variable "bootstrap_options" {
   default     = "user_data.sh"
   type        = string
@@ -199,19 +148,3 @@ variable "interfaces" {
   # object attributes are still experimental
   type = map(any)
 }
-
-# variable "zpa_provisioning_key" {
-#   description = "zpa provisioning key"
-#   default     = null
-#   type        = string
-# }
-
-# variable "secure_parameters" {
-#   description = "aws ssm secure parameter"
-#   default     = null
-#   type        = string
-# }
-
-# variable "create_secure_parameter" { default = true }
-# variable "parameter_name" { default = null }
-# variable "parameter_description" { default = null }

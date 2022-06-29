@@ -1,3 +1,10 @@
+# 0. Random
+resource "random_string" "suffix" {
+  length  = 8
+  upper   = false
+  special = false
+}
+
 module "security_vpc" {
   source = "../../modules/vpc"
 
@@ -45,7 +52,7 @@ module "appconnector-vm" {
       security_group_ids = [module.security_vpc.security_group_ids["zpa_app_connector_mgmt"]]
       source_dest_check  = true
       subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
-      create_public_ip   = false
+      create_public_ip   = true
     }
   }
 
@@ -62,7 +69,8 @@ locals {
     [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
       {
         subnet_key   = "mgmt"
-        next_hop_set = module.natgw_set.next_hop_set
+        # next_hop_set = module.natgw_set.next_hop_set
+        next_hop_set = module.security_vpc.igw_as_next_hop_set
         to_cidr      = cidr
       }
     ],
@@ -107,14 +115,31 @@ module "zpa_app_connector_group" {
 
 # Create Parameter Store
 resource "aws_ssm_parameter" "this" {
-  name        = "ZSAC-${var.region}-${module.security_vpc.id}"
+  name = "ZSAC-${var.region}-${module.security_vpc.id}"
   description = "ZSAC-${var.region}-${module.security_vpc.id}"
   type        = "SecureString"
   value       = module.zpa_app_connector_group.provisioning_key
+  key_id      = aws_kms_key.this.key_id
   overwrite   = true
   lifecycle {
     ignore_changes = [
       value,
     ]
   }
+}
+
+# Create an alias to the key
+resource "aws_kms_alias" "this" {
+  name          = "alias/${var.kms_alias}-zpa-kms-${random_string.suffix.result}"
+  target_key_id = aws_kms_key.this.key_id
+}
+
+# Creates/manages KMS CMK
+resource "aws_kms_key" "this" {
+  description              = var.description
+  customer_master_key_spec = var.key_spec
+  deletion_window_in_days  = var.deletion_window_in_days
+  is_enabled               = var.is_enabled
+  enable_key_rotation      = var.rotation_enabled
+  multi_region             = var.multi_region
 }

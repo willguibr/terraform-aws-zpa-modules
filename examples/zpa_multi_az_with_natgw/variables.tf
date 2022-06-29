@@ -35,15 +35,47 @@ variable "app_connector_group_dns_query_type" {}
 variable "provisioning_key_association_type" {}
 variable "provisioning_key_max_usage" {}
 
-
-#aws ssm secure parameter
-# variable "parameter_name" {
-#     description = "Parameter Store Name"
-#     default = "ZSDEMO"
-# }
-
-# variable "parameter_description" {
-#     description = "Parameter Store Name"
-#     default = "ZSDEMO"
-# }
 variable "path_to_public_key" {}
+
+# KMS Key Variables
+variable "description" {
+  description = "Zscaler_KMS_Key"
+  default     = "Zscaler_KMS_Key"
+  type        = string
+}
+
+variable "multi_region" {
+  description = "Enable Multi-Region KMS"
+  default     = true
+  type        = bool
+}
+
+# Options available
+# SYMMETRIC_DEFAULT, RSA_2048, RSA_3072,
+# RSA_4096, ECC_NIST_P256, ECC_NIST_P384,
+# ECC_NIST_P521, or ECC_SECG_P256K1
+variable "key_spec" {
+  default = "SYMMETRIC_DEFAULT"
+  type    = string
+}
+
+variable "is_enabled" {
+  default = true
+  type    = bool
+}
+
+variable "rotation_enabled" {
+  default = false
+  type    = bool
+}
+
+variable "deletion_window_in_days" {
+  default = 30
+  type    = number
+}
+
+variable "kms_alias" {
+  description = "KMS Alias"
+  default = "Zscaler_KMS_SSM01"
+  type        = string
+}
