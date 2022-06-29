@@ -48,14 +48,12 @@ module "appconnector-vm" {
     mgmt = {
       device_index       = 0
       security_group_ids = [module.security_vpc.security_group_ids["zpa_app_connector_mgmt"]]
-      source_dest_check  = true
+      source_dest_check  = false
       subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
       create_public_ip   = false
     }
   }
   tags                 = var.global_tags
-  # zpa_provisioning_key = module.zpa_app_connector_group.provisioning_key
-  # secure_parameters    = var.secure_parameters
   path_to_public_key   = var.path_to_public_key
 }
 

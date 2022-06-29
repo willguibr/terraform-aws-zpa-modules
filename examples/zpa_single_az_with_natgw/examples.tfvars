@@ -53,8 +53,6 @@ bootstrap_options    = "user_data.sh"
 iam_instance_profile = "ZPA_Instance_Profile"
 
 # # ZPA App Connector Group
-# app_connector_group_name                     = "zsdemo-app-connector-aws"
-# app_connector_group_description              = "zsdemo-app-connector-aws"
 app_connector_group_enabled                  = true
 app_connector_group_country_code             = "US"
 app_connector_group_latitude                 = "37.3382082"
