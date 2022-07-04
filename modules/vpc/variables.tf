@@ -64,6 +64,4 @@ variable "enable_dns_support" { default = null }
 variable "enable_dns_hostnames" { default = null }
 variable "instance_tenancy" { default = null }
 variable "assign_generated_ipv6_cidr_block" { default = null }
-variable "create_vpn_gateway" { default = false }
-variable "vpn_gateway_amazon_side_asn" { default = null }
 variable "vpc_tags" { default = {} }
