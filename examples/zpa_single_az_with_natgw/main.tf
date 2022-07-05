@@ -50,7 +50,7 @@ module "appconnector-vm" {
       security_group_ids = [module.security_vpc.security_group_ids["zpa_app_connector_mgmt"]]
       source_dest_check  = false
       subnet_id          = module.security_subnet_sets["mgmt"].subnets[each.value.az].id
-      create_public_ip   = true
+      create_public_ip   = false
     }
   }
 
@@ -63,8 +63,8 @@ locals {
     [for cidr in var.security_vpc_routes_outbound_destin_cidrs :
       {
         subnet_key   = "mgmt"
-        # next_hop_set = module.natgw_set.next_hop_set
-        next_hop_set = module.security_vpc.igw_as_next_hop_set
+        next_hop_set = module.natgw_set.next_hop_set
+        # next_hop_set = module.security_vpc.igw_as_next_hop_set
         to_cidr      = cidr
       }
     ],
