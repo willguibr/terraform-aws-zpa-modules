@@ -80,7 +80,7 @@ jobs:
           region : 'US'
           iac_dir : 'IAC directory path from root'
           iac_file : 'IAC file path from root'
-          output_format : 'json/yaml/sarif/human/json+github-sarif/human+github-sarif'
+          output_format : 'human+github-sarif'
           fail_build : 'false'
           directory: .
           framework: terraform
