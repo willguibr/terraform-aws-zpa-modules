@@ -25,13 +25,6 @@ jobs:
           # Semantic version range syntax (like 3.x) or the exact Python version
           python-version: '3.9.4'
 
-      - name: Run pre-commit framework as the developer should run it
-        run: sudo ./scripts/install.sh && sudo ./scripts/run.sh
-
-      - name: The `git diff` showing whether the pre-commit mandated extra changes to the repository files
-        if: failure()
-        run: git diff
-
   validate:
     name: Validate
     runs-on: ubuntu-latest
