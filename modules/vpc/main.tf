@@ -69,34 +69,6 @@ resource "aws_route_table_association" "from_igw" {
 }
 
 ############################################################
-# VPN Gateway
-############################################################
-
-resource "aws_vpn_gateway" "this" {
-  count = var.create_vpn_gateway ? 1 : 0
-
-  vpc_id          = local.vpc.id
-  amazon_side_asn = var.vpn_gateway_amazon_side_asn
-  tags            = merge(var.global_tags, { Name = "${var.name}-vgw" })
-}
-
-#### Dedicated RT for Ingress Routing - Traffic from VGW to us ####
-
-resource "aws_route_table_association" "from_vgw" {
-  count = var.create_vpn_gateway ? 1 : 0
-
-  gateway_id     = aws_vpn_gateway.this[0].id
-  route_table_id = aws_route_table.from_vgw[0].id
-}
-
-resource "aws_route_table" "from_vgw" {
-  count = var.create_vpn_gateway ? 1 : 0
-
-  vpc_id = local.vpc.id
-  tags   = merge(var.global_tags, { Name = "${var.name}-vgw" })
-}
-
-############################################################
 # Security Groups
 ############################################################
 
